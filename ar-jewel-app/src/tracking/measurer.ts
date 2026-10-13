@@ -16,6 +16,7 @@ export const MAX_YAW = 0.35; // radians, about 20 degrees
 
 export interface Profile {
   /** Median over the stable frames. `neckMm` is undefined when shoulders were never seen. */
+  faceWidthMm: number;
   earSpanMm: number;
   neckMm?: number;
   pxPerMm: number;
@@ -45,7 +46,7 @@ export class Measurer {
   private heldMs = 0; // accumulated stable time
   private lastAt?: number;
   private lostSince?: number;
-  private samples: { ear: number; neck: number | undefined; ppm: number }[] = [];
+  private samples: { face: number; ear: number; neck: number | undefined; ppm: number }[] = [];
   private state: MeasureState = fresh();
 
   reset() {
@@ -53,6 +54,20 @@ export class Measurer {
     this.heldMs = 0;
     this.samples = [];
     this.state = fresh();
+  }
+
+  /** Continue from an earlier scan of the same visitor: ready at once (a long loss still triggers a new measuring). */
+  assume(profile: Profile): MeasureState {
+    this.reset();
+    return (this.state = {
+      phase: 'ready',
+      face: true,
+      ears: true,
+      neck: profile.neckMm !== undefined,
+      progress: 1,
+      hint: 'none',
+      profile,
+    });
   }
 
   update(tr: Tracking | null, nowMs: number): MeasureState {
@@ -81,7 +96,12 @@ export class Measurer {
     if (ok && tr) {
       this.heldMs += dt;
       if (this.samples.length < 90)
-        this.samples.push({ ear: tr.ears.spanMm, neck: neck ? tr.neckline.widthMm : undefined, ppm: tr.pxPerMm });
+        this.samples.push({
+          face: tr.faceW / tr.pxPerMm,
+          ear: tr.ears.spanMm,
+          neck: neck ? tr.neckline.widthMm : undefined,
+          ppm: tr.pxPerMm,
+        });
     } else {
       this.heldMs = 0;
       this.samples = [];
@@ -98,6 +118,7 @@ export class Measurer {
         progress: 1,
         hint: 'none',
         profile: {
+          faceWidthMm: median(this.samples.map((s) => s.face)),
           earSpanMm: median(this.samples.map((s) => s.ear)),
           neckMm: necks.length ? median(necks) : undefined,
           pxPerMm: median(this.samples.map((s) => s.ppm)),

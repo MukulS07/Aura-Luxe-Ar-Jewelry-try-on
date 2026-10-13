@@ -1,5 +1,5 @@
 import type { CatalogItem, Tracking } from '../types';
-import { Measurer, type MeasureState } from '../tracking/measurer';
+import { Measurer, type MeasureState, type Profile } from '../tracking/measurer';
 import { Tracker } from '../tracking/tracker';
 import { clampFit, defaultFit, Placement, type Fit, type Frame } from './placement';
 import { Foreground, drawCover } from './foreground';
@@ -45,10 +45,10 @@ export class TryOn {
   private measureKey = '';
   measure: MeasureState = { phase: 'measuring', face: false, ears: false, neck: false, progress: 0, hint: 'noface' };
   private item?: CatalogItem;
-  private scene: Scene3D;
-  private fg: Foreground;
+  private scene?: Scene3D; // absent for the scan screen (camera and tracking only)
+  private fg?: Foreground;
   private tracker?: Tracker;
-  private placement: Placement;
+  private placement?: Placement;
   private stream?: MediaStream;
   private raf = 0;
   private running = false;
@@ -67,23 +67,31 @@ export class TryOn {
     host: HTMLElement,
     readonly W: number,
     readonly H: number,
+    jewelry = true,
   ) {
     this.video.playsInline = true;
     this.video.muted = true;
     this.video.className = 'cam';
     this.canvas.className = 'gl';
-    host.prepend(this.canvas);
+    if (jewelry) {
+      host.prepend(this.canvas);
+      this.scene = new Scene3D(this.canvas, W, H);
+      this.fg = new Foreground(W, H);
+      this.canvas.after(this.fg.canvas); // above the jewelry, below the screen's own controls
+      this.placement = new Placement(H);
+    }
     host.prepend(this.video);
-    this.scene = new Scene3D(this.canvas, W, H);
-    this.fg = new Foreground(W, H);
-    this.canvas.after(this.fg.canvas); // above the jewelry, below the screen's own controls
-    this.placement = new Placement(H);
   }
 
   setPiece(item: CatalogItem) {
     this.item = item;
-    this.placement.restartFade();
-    return this.scene.setPiece(item);
+    this.placement?.restartFade();
+    return this.scene?.setPiece(item) ?? Promise.resolve();
+  }
+
+  /** Carry an earlier scan over, so the visitor is not measured twice. */
+  assumeMeasured(p: Profile) {
+    this.measure = this.measurer.assume(p);
   }
 
   get fit(): Fit {
@@ -121,11 +129,13 @@ export class TryOn {
         this.measureKey = key;
         this.onMeasure?.(m);
       }
-      // No jewelry until the visitor has been measured
-      this.lastFrame = this.placement.update(tr, m.phase === 'ready' ? this.item : undefined, now, this._fit, this.detectMs);
-      this.scene.apply(this.lastFrame);
-      this.scene.render();
-      this.maskForeground(tr);
+      if (this.scene && this.placement) {
+        // No jewelry until the visitor has been measured
+        this.lastFrame = this.placement.update(tr, m.phase === 'ready' ? this.item : undefined, now, this._fit, this.detectMs);
+        this.scene.apply(this.lastFrame);
+        this.scene.render();
+        this.maskForeground(tr);
+      }
       this.onFrame?.(tr, now);
       this.updateHint(tr ? tr.faceCount : 0, now);
       this.frames++;
@@ -148,7 +158,7 @@ export class TryOn {
         this.item.type === 'earrings'
           ? { kind: 'earrings', lobes: [tr.ears.lobeL, tr.ears.lobeR], far: farSide(tr.yaw), faceCx: tr.center.x, ppm: tr.pxPerMm }
           : { kind: 'necklace' };
-    this.fg.render(this.video, this.video.videoWidth, this.video.videoHeight, this.tracker?.mask, zone);
+    this.fg?.render(this.video, this.video.videoWidth, this.video.videoHeight, this.tracker?.mask, zone);
   }
 
   private updateHint(faces: number, now: number) {
@@ -177,15 +187,16 @@ export class TryOn {
     const g = c.getContext('2d')!;
     drawCover(g, this.video, this.video.videoWidth, this.video.videoHeight, this.W, this.H);
     g.drawImage(this.canvas, 0, 0, this.W, this.H);
-    g.drawImage(this.fg.canvas, 0, 0, this.W, this.H); // hair and face stay in front of the jewelry in the photo too
+    if (this.fg) g.drawImage(this.fg.canvas, 0, 0, this.W, this.H); // hair and face stay in front of the jewelry in the photo too
     return new Promise((ok, fail) => c.toBlob((b) => (b ? ok(b) : fail(new Error('capture failed'))), 'image/jpeg', 0.9));
   }
 
   stop(): void {
     this.running = false;
     this.measurer.reset(); // the next visit is measured from scratch
+    this.measure = { phase: 'measuring', face: false, ears: false, neck: false, progress: 0, hint: 'noface' };
     this.measureKey = '';
-    this.fg.clear();
+    this.fg?.clear();
     cancelAnimationFrame(this.raf);
     this.stream?.getTracks().forEach((t) => t.stop());
     this.stream = undefined;
@@ -195,9 +206,9 @@ export class TryOn {
 
   dispose(): void {
     this.stop();
-    this.scene.dispose();
+    this.scene?.dispose();
     this.video.remove();
     this.canvas.remove();
-    this.fg.dispose();
+    this.fg?.dispose();
   }
 }

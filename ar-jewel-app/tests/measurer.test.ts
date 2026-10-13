@@ -86,6 +86,18 @@ describe('measuring step', () => {
     expect(s.phase).toBe('measuring');
     expect(s.progress).toBeLessThanOrEqual(MAX_FRAME_GAP_MS / STABLE_MS + 0.001);
   });
+  it('assume() makes a returning visitor ready at once', () => {
+    const m = new Measurer();
+    expect(m.assume({ faceWidthMm: 140, earSpanMm: 140, neckMm: 100, pxPerMm: 2 }).phase).toBe('ready');
+    expect(m.update(full(), 0).phase).toBe('ready');
+    expect(m.update(full(), 33).profile?.neckMm).toBe(100);
+  });
+  it('profile carries face width, ear span and neck width', () => {
+    const p = feed(new Measurer(), full(), 0, STABLE_MS + 100).profile!;
+    expect(p.faceWidthMm).toBeGreaterThan(50);
+    expect(p.earSpanMm).toBeGreaterThan(50);
+    expect(p.neckMm).toBeGreaterThan(90);
+  });
   it('reset forgets everything', () => {
     const m = new Measurer();
     feed(m, full(), 0, STABLE_MS + 100);

@@ -44,20 +44,28 @@ test('new-design booth: notice, camera, tracking and jewelry', async ({ page }) 
   await page.goto('/booth-v2.html?debug');
   const camOn = () => page.evaluate(() => !!(document.querySelector('#live video') as HTMLVideoElement | null)?.srcObject);
 
-  // Notice comes first: asking for the live screen without accepting goes to the notice, no camera
+  // Notice first, then the scan screen (camera on, jewelry not yet), then the pick
   await page.evaluate(() => (document.querySelector('[data-go="notice"]') as HTMLElement).click());
-  await page.locator('#notice [data-go="pick"]').click(); // Accept
-  expect(await camOn()).toBe(false);
+  await page.locator('#notice [data-go="scan"]').click(); // Accept
+  await expect(page.locator('#scan.on')).toBeVisible();
+  await expect(page.locator('#scanContinue')).toBeDisabled(); // not measured yet
+  await expect
+    .poll(() => page.evaluate(() => !!(document.querySelector('#scan video') as HTMLVideoElement | null)?.srcObject), { timeout: 30_000 })
+    .toBe(true);
+  await page.waitForTimeout(2500);
+  await page.screenshot({ path: 'test-results/v2-scan-measuring.png' });
+  await expect(page.locator('#scanContinue')).toBeEnabled({ timeout: 120_000 }); // measured
+  await expect(page.locator('#scan .mlist li.ok')).toHaveCount(3);
+  for (const id of ['#vFace', '#vEars', '#vNeck']) expect(await page.locator(id).textContent()).toMatch(/\d+ mm/);
+  await page.screenshot({ path: 'test-results/v2-scan-done.png' });
+  await page.locator('#scanContinue').click();
+  await expect(page.locator('#pick.on')).toBeVisible();
+  expect(await page.evaluate(() => !!(document.querySelector('#scan video') as HTMLVideoElement).srcObject)).toBe(false); // scan camera is off again
   await page.locator('[data-pick="ear-001"]').click();
   await expect(page.locator('#live.on')).toBeVisible();
   await expect.poll(camOn, { timeout: 30_000 }).toBe(true);
-
-  // Measuring comes first: panel visible, shutter locked, and no jewelry drawn before the moment it unlocks
-  await expect(page.locator('#measure')).toBeVisible();
-  await expect(page.locator('#shutter')).toBeDisabled();
-  await page.screenshot({ path: 'test-results/v2-measuring.png' });
-  await expect(page.locator('#shutter')).toBeEnabled({ timeout: 60_000 });
-  await expect(page.locator('.mchip.ok')).toHaveCount(3);
+  // Already measured: no second measuring, the shutter is open and the jewelry appears
+  await expect(page.locator('#shutter')).toBeEnabled({ timeout: 30_000 });
   await page.waitForTimeout(5000); // piece fades in
   await page.screenshot({ path: 'test-results/v2-live-earrings.png' });
   // Every drawn frame belongs to a visitor who had been measured

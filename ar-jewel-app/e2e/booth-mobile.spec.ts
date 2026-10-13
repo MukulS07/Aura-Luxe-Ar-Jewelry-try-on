@@ -85,10 +85,20 @@ test('phone: whole flow fits the screen and works by touch', async ({ page }) =>
   await page.waitForTimeout(1200);
   await page.screenshot({ path: 'test-results/m-2-notice.png' });
   await fits('notice');
-  await tappable('#notice [data-go="pick"]', 'accept');
+  await tappable('#notice [data-go="scan"]', 'accept');
   await tappable('#notice [data-go="start"]', 'decline');
 
-  await page.locator('#notice [data-go="pick"]').tap();
+  await page.locator('#notice [data-go="scan"]').tap();
+  await expect(page.locator('#scan.on')).toBeVisible();
+  await page.waitForTimeout(2500);
+  await page.screenshot({ path: 'test-results/m-2b-scan.png' });
+  await fits('scan measuring');
+  await expect(page.locator('#scanContinue')).toBeEnabled({ timeout: 120_000 });
+  await page.waitForTimeout(800);
+  await page.screenshot({ path: 'test-results/m-2c-scan-done.png' });
+  await fits('scan done');
+  await tappable('#scanContinue', 'continue');
+  await page.locator('#scanContinue').tap();
   await expect(page.locator('#pick.on')).toBeVisible();
   await page.waitForTimeout(1200);
   await page.screenshot({ path: 'test-results/m-3-pick.png' });
@@ -97,10 +107,9 @@ test('phone: whole flow fits the screen and works by touch', async ({ page }) =>
 
   await page.locator('[data-pick="ear-001"]').tap();
   await expect(page.locator('#live.on')).toBeVisible();
-  await expect(page.locator('#measure')).toBeVisible();
   await page.waitForTimeout(2000);
-  await page.screenshot({ path: 'test-results/m-4-measuring.png' });
-  await fits('live measuring');
+  await page.screenshot({ path: 'test-results/m-4-live-start.png' });
+  await fits('live start');
   await expect(page.locator('#shutter')).toBeEnabled({ timeout: 90_000 });
   await page.waitForTimeout(5000);
   await page.screenshot({ path: 'test-results/m-5-live.png' });

@@ -238,6 +238,33 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .mbar i{display:block;height:100%;width:100%;background:var(--gold);transform-origin:left;transform:scaleX(0);transition:transform .2s linear}
 .shutter:disabled{opacity:.35;pointer-events:none}
 
+/* ===== SCAN: face layout and measuring (dark, camera in a viewfinder) ===== */
+#scan{background:#070605;color:#F7F2E8;--ink:#F7F2E8;--ink-2:rgba(247,242,232,.78);--gold-ink:var(--gold);--line:rgba(247,242,232,.25);--scrim:rgba(11,9,8,.72)}
+.scanframe{position:absolute;left:96px;top:90px;width:1000px;height:900px;border-radius:44px;overflow:hidden;background:#000;border:1px solid var(--line);box-shadow:0 0 0 1px rgba(216,181,106,.28),0 30px 80px rgba(0,0,0,.6)}
+.scanframe video.cam{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);background:#000}
+.scanframe .br{position:absolute;width:70px;height:70px;border:3px solid var(--gold);z-index:3;pointer-events:none;filter:drop-shadow(0 0 8px rgba(216,181,106,.6))}
+.scanframe .tl{left:22px;top:22px;border-right:0;border-bottom:0;border-top-left-radius:26px}
+.scanframe .tr{right:22px;top:22px;border-left:0;border-bottom:0;border-top-right-radius:26px}
+.scanframe .bl{left:22px;bottom:22px;border-right:0;border-top:0;border-bottom-left-radius:26px}
+.scanframe .bb{right:22px;bottom:22px;border-left:0;border-top:0;border-bottom-right-radius:26px}
+.sweep{display:none;position:absolute;left:0;right:0;height:22%;z-index:2;pointer-events:none;background:linear-gradient(to bottom,transparent,rgba(240,216,152,.0) 35%,rgba(240,216,152,.45) 49%,rgba(255,244,214,.9) 50%,rgba(240,216,152,.45) 51%,rgba(240,216,152,0) 65%,transparent);animation:sweepy 2.8s ease-in-out infinite}
+#scan.measuring .sweep{display:block}
+@keyframes sweepy{from{top:-22%}to{top:100%}}
+#scan .chip{bottom:36px}
+.scanpanel{position:absolute;left:1160px;right:96px;top:90px;bottom:90px;display:flex;flex-direction:column;justify-content:center;gap:26px}
+.scanpanel .title{font-size:64px}
+.mlist{list-style:none;border-top:1px solid var(--line)}
+.mlist li{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:16px;padding:22px 0;border-bottom:1px solid var(--line);font:500 28px var(--sans);color:var(--ink-2);transition:color .3s}
+.mdot{width:26px;height:26px;border-radius:50%;border:2px solid var(--ink-2);box-sizing:border-box;transition:all .3s}
+.mlist li.ok{color:var(--ink)}
+.mlist li.ok .mdot{background:var(--gold);border-color:var(--gold)}
+.mval{font:400 46px/1 var(--serif);color:var(--ink-2)}
+.mlist li.ok .mval{color:var(--gold-hi)}
+.mbar.big{width:100%;height:8px}
+#scanContinue:disabled{opacity:.35;pointer-events:none}
+#scan .btn-ghost{background:transparent}
+
+
 /* ===== Phone layout: real px, portrait, no scaling (screens narrower than 820px) ===== */
 .march{display:none}
 #dl{display:none}
@@ -326,6 +353,23 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .frame .img::after{font-size:15px;bottom:12px}
   .pright{gap:12px}.pright .btn{width:100%}
 
+
+  /* scan */
+  #scan{overflow:hidden}
+  .scanframe{position:absolute;left:12px;right:12px;top:calc(env(safe-area-inset-top) + 12px);width:auto;height:56dvh;border-radius:26px}
+  .scanframe .br{width:40px;height:40px;border-width:2px}
+  #scan .chip{bottom:16px}
+  .scanpanel{left:16px;right:16px;top:calc(env(safe-area-inset-top) + 56dvh + 28px);bottom:calc(14px + env(safe-area-inset-bottom));justify-content:flex-start;gap:12px}
+  .scanpanel .title{font-size:28px}
+  .scanpanel .eyebrow{display:none}
+  .mlist{display:grid;grid-template-columns:repeat(3,1fr);border-top:0;gap:8px}
+  .mlist li{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 10px;border:1px solid var(--line);border-radius:14px;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+  .mlist .mdot{width:14px;height:14px}
+  .mval{font-size:20px;text-transform:none;white-space:nowrap;letter-spacing:0}
+  .scanpanel .body{font-size:15px}
+  .scanpanel .caption{font-size:11px}
+  .scanpanel .row{margin-top:auto}
+
   /* done: phones download the photo (the QR is for the booth screen) */
   #qrS{flex-direction:column;padding:28px 20px;gap:18px;align-items:stretch;justify-content:center}
   #qrS .l{gap:16px;flex:none}
@@ -341,6 +385,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   #idle .bsheet{width:calc(100% - 28px);padding:28px 20px;gap:16px}
   .ring{width:120px;height:120px;font-size:50px}
 }
+
 
 /* dev menu (?dev) */
 nav#dev{position:fixed;left:10px;top:10px;z-index:99;display:flex;flex-direction:column;gap:4px;background:rgba(0,0,0,.7);padding:8px;border-radius:10px}
@@ -397,8 +442,30 @@ nav#dev button.on{background:#d8b56a;color:#111}
         <li><svg class="ico"><use href="#i-user"/></svg>We never identify you.</li>
         <li><svg class="ico"><use href="#i-save"/></svg>Photos save only if you choose, and vanish after 24 hours.</li>
       </ul>
-      <div class="row"><button class="btn btn-ghost" data-go="start">No thanks</button><button class="btn btn-gold" data-go="pick">Accept</button></div>
+      <div class="row"><button class="btn btn-ghost" data-go="start">No thanks</button><button class="btn btn-gold" data-go="scan">Accept</button></div>
     </div>
+  </div>
+</section>
+
+<!-- 3 SCAN: face layout and measuring, before any jewelry -->
+<section class="screen" id="scan">
+  <div class="scanframe" id="scanFrame">
+    <div class="sweep"></div>
+    <i class="br tl"></i><i class="br tr"></i><i class="br bl"></i><i class="br bb"></i>
+    <div class="chip" id="scanChip"><span class="dot"></span><span id="scanChipT">Starting camera…</span></div>
+  </div>
+  <div class="scanpanel">
+    <p class="eyebrow">First, a quick measure</p>
+    <h1 class="title">Let's find your fit</h1>
+    <ul class="mlist">
+      <li data-m="face"><span class="mdot"></span><span class="mlab">Face width</span><b class="mval" id="vFace">–</b></li>
+      <li data-m="ears"><span class="mdot"></span><span class="mlab">Ear to ear</span><b class="mval" id="vEars">–</b></li>
+      <li data-m="neck"><span class="mdot"></span><span class="mlab">Neck width</span><b class="mval" id="vNeck">–</b></li>
+    </ul>
+    <div class="mbar big"><i id="scanFill"></i></div>
+    <p class="body" id="scanNote">Look at the camera and hold still.</p>
+    <p class="caption">Approximate, read from your camera view. Nothing is saved or uploaded.</p>
+    <div class="row"><button class="btn btn-ghost" data-go="start">Back</button><button class="btn btn-gold" id="scanContinue" data-go="pick" disabled>Continue</button></div>
   </div>
 </section>
 

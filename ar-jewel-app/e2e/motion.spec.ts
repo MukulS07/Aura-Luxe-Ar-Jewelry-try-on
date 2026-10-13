@@ -92,7 +92,9 @@ test('tracking follows a moving face: gain, jitter and lag', async ({ page }) =>
   page.on('pageerror', (e) => console.log('PAGEERROR', e.message));
   await page.goto('/booth-v2.html?debug');
   await page.evaluate(() => (document.querySelector('[data-go="notice"]') as HTMLElement).click());
-  await page.locator('#notice [data-go="pick"]').click();
+  await page.locator('#notice [data-go="scan"]').click();
+  await expect(page.locator('#scanContinue')).toBeEnabled({ timeout: 120_000 }); // measured on the scan screen
+  await page.locator('#scanContinue').click();
   await page.locator('[data-pick="ear-001"]').click();
   await expect(page.locator('#shutter')).toBeEnabled({ timeout: 120_000 }); // measuring done, jewelry is being drawn
   await page.waitForTimeout(3000);

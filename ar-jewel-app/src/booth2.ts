@@ -1,4 +1,5 @@
-import type { MeasureState } from './tracking/measurer';
+import type { MeasureState, Profile } from './tracking/measurer';
+import { ScanOverlay } from './ui/scan-overlay';
 import type { CatalogItem, JewelType } from './types';
 import { preloadTracker, TryOn, type Hint } from './render/tryon';
 import { swatch } from './ui/swatch';
@@ -29,6 +30,9 @@ let catalog: CatalogItem[] = [];
 let cat: JewelType = 'earrings';
 let cur: CatalogItem | undefined;
 let tryon: TryOn | undefined;
+let scanTry: TryOn | undefined; // camera and tracking for the scan screen (no jewelry)
+let scanOverlay: ScanOverlay | undefined;
+let profile: Profile | undefined; // this visitor's measurements, kept in memory until Start
 let measured = false; // jewelry and the shutter wait for the measuring step
 let noticeAccepted = false; // camera never starts without this (agent.md rule 2)
 let photoUrl = '';
@@ -145,7 +149,7 @@ function renderStrip() {
 // ---------- screens ----------
 /** Change screen with an iris wipe that opens from the last touch (falls back to a plain switch). */
 function go(id: string) {
-  if (id === 'live' && !noticeAccepted) id = 'notice'; // camera only after the privacy notice
+  if ((id === 'live' || id === 'scan') && !noticeAccepted) id = 'notice'; // camera only after the privacy notice
   const target = id;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!document.startViewTransition || reduced) return show(target);
@@ -159,10 +163,12 @@ function show(id: string) {
   $$('.sheet-bg').forEach((s) => s.classList.remove('on'));
   $$('#dev button').forEach((b) => b.classList.toggle('on', b.dataset.go === id));
   clearInterval(idleI);
-  if (id !== 'live') tryon?.stop(); // camera off everywhere except the live screen
+  if (id !== 'live') tryon?.stop(); // camera off everywhere except the scan and live screens
+  if (id !== 'scan') scanTry?.stop();
   if (id === 'start') {
     replayOpening();
     noticeAccepted = false; // every session sees the notice
+    profile = undefined; // and is measured again
     clearPhoto();
     clearTimeout(idleT);
   } else bump();
@@ -170,6 +176,7 @@ function show(id: string) {
   if (id === 'photoS') phoneCopy();
   if (id === 'qrS') prepareDone();
   if (id === 'pick') renderPick();
+  if (id === 'scan') void startScan();
   if (id === 'live') void startLive();
 }
 
@@ -219,6 +226,69 @@ function idle() {
   }, 1000);
 }
 
+// ---------- scan: face layout and measuring, before any jewelry ----------
+const SCAN_NOTE: Record<MeasureState['hint'], string> = {
+  none: 'Hold still, measuring…',
+  noface: 'Look at the camera and step a little closer',
+  turn: 'Look straight at the camera',
+  shoulders: 'Step back a little so your shoulders are in view',
+};
+const mm = (v: number | undefined) => (v ? `≈ ${Math.round(v)} mm` : '–');
+let valuesAt = 0;
+
+function showScan(s: MeasureState) {
+  $('#scan').classList.toggle('measuring', s.phase === 'measuring');
+  $$('#scan .mlist li').forEach((li) => li.classList.toggle('ok', Boolean(s[li.dataset.m as 'face' | 'ears' | 'neck'])));
+  $('#scanFill').style.transform = `scaleX(${s.progress})`;
+  const go = $<HTMLButtonElement>('#scanContinue');
+  if (s.phase === 'ready' && s.profile) {
+    profile = s.profile;
+    $('#vFace').textContent = mm(s.profile.faceWidthMm);
+    $('#vEars').textContent = mm(s.profile.earSpanMm);
+    $('#vNeck').textContent = s.profile.neckMm ? mm(s.profile.neckMm) : 'not in view';
+    $('#scanNote').textContent = 'All set. Your fit is measured.';
+    $('#scanChip').classList.add('hide');
+    go.disabled = false;
+  } else {
+    profile = undefined; // lost the face for a while: measure again
+    go.disabled = true;
+    $('#scanNote').textContent = SCAN_NOTE[s.hint];
+    $('#scanChipT').textContent = SCAN_NOTE[s.hint];
+    $('#scanChip').classList.remove('hide');
+  }
+}
+
+async function startScan() {
+  const frame = $('#scanFrame');
+  const w = frame.clientWidth,
+    h = frame.clientHeight;
+  if (!scanTry || scanTry.W !== w || scanTry.H !== h) {
+    scanOverlay?.dispose();
+    scanTry?.dispose();
+    const t = (scanTry = new TryOn(frame, w, h, false));
+    const o = (scanOverlay = new ScanOverlay(frame, w, h));
+    t.onMeasure = showScan;
+    t.onFrame = (tr, now) => {
+      o.draw(tr, t.measure, now);
+      if (!tr || t.measure.phase === 'ready' || now - valuesAt < 150) return; // live estimates while measuring
+      valuesAt = now;
+      const m = t.measure;
+      if (m.face) $('#vFace').textContent = mm(tr.faceW / tr.pxPerMm);
+      if (m.ears) $('#vEars').textContent = mm(tr.ears.spanMm);
+      if (m.neck) $('#vNeck').textContent = mm(tr.neckline.widthMm);
+    };
+  }
+  $$('#scan .mlist .mval').forEach((v) => (v.textContent = '–'));
+  showScan(scanTry.measure);
+  $('#scanChipT').textContent = 'Starting camera…';
+  try {
+    await scanTry.start();
+    if (!$('#scan').classList.contains('on')) scanTry.stop();
+  } catch {
+    $('#scanChipT').textContent = "Camera isn't available. Please ask staff for help.";
+  }
+}
+
 // ---------- live try-on ----------
 function setChip(text: string | null) {
   const chip = $('#chip');
@@ -241,7 +311,7 @@ function showMeasure(s: MeasureState) {
     if (measured) return;
     measured = true;
     ($('#shutter') as HTMLButtonElement).disabled = false;
-    setChip('Measured. Choose your piece');
+    setChip(profile ? null : 'Measured. Choose your piece'); // no repeat message after the scan screen
     clearTimeout(measureTimer);
     measureTimer = window.setTimeout(() => {
       $('#measure').classList.add('done');
@@ -277,6 +347,7 @@ async function startLive() {
     gt = $('#guideT');
   g.classList.remove('off');
   gt.style.opacity = '1';
+  if (profile) tryon.assumeMeasured(profile); // already measured on the scan screen
   measured = false;
   ($('#shutter') as HTMLButtonElement).disabled = true;
   $('#measure').classList.remove('done');
@@ -351,6 +422,16 @@ function openStory() {
 /** Phone turned or window resized: the camera surface must match the screen, so rebuild it. */
 function onResize() {
   sizeDust();
+  if (
+    scanTry &&
+    $('#scan').classList.contains('on') &&
+    (scanTry.W !== $('#scanFrame').clientWidth || scanTry.H !== $('#scanFrame').clientHeight)
+  ) {
+    scanOverlay?.dispose();
+    scanTry.dispose();
+    scanTry = scanOverlay = undefined;
+    void startScan();
+  }
   if (!tryon) return;
   const sz = stageSize();
   if (tryon.W === sz.w && tryon.H === sz.h) return;
@@ -433,7 +514,7 @@ document.addEventListener('click', (e) => {
   if (!el) return;
   const d = el.dataset;
   if (d.go) {
-    if (d.go === 'pick' && el.closest('#notice')) noticeAccepted = true; // Accept
+    if (d.go === 'scan' && el.closest('#notice')) noticeAccepted = true; // Accept
     go(d.go);
   } else if (d.cat) {
     cat = d.cat as JewelType;
@@ -461,10 +542,11 @@ const dev = $('#dev');
 dev.innerHTML += [
   ['start', '1 Start'],
   ['notice', '2 Notice'],
-  ['pick', '3 Pick'],
-  ['live', '4 Live'],
-  ['photoS', '5 Photo'],
-  ['qrS', '6 QR'],
+  ['scan', '3 Scan'],
+  ['pick', '4 Pick'],
+  ['live', '5 Live'],
+  ['photoS', '6 Photo'],
+  ['qrS', '7 QR'],
 ]
   .map(([k, l]) => `<button data-go="${k}">${l}</button>`)
   .join('');
