@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Catalog admin — Aura Luxe</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<style>
+.top{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;border-bottom:1px solid var(--line);background:var(--paper)}
+.top .l{display:flex;align-items:baseline;gap:20px}
+.shell{max-width:1240px;margin:0 auto;padding:40px}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:28px;flex-wrap:wrap}
+.head h1{font-size:52px;line-height:1}
+.stats{display:flex;gap:36px;margin-bottom:28px}
+.stats div{display:flex;flex-direction:column;gap:2px}.stats b{font:400 36px var(--serif)}.stats span{font:500 11px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2)}
+.tabs{display:inline-flex;padding:5px;border:1px solid var(--line);border-radius:999px;margin-bottom:20px}
+.tabs button{min-height:40px;padding:0 22px;border-radius:999px;border:0;background:none;font:600 12px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);cursor:pointer}
+.tabs button.on{background:var(--ink);color:#fff}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden}
+th{text-align:left;font:500 11px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);padding:16px 20px;background:var(--paper-2)}
+td{padding:14px 20px;border-top:1px solid var(--line);vertical-align:middle}
+td.th{width:84px}
+.th i{display:block;width:64px;height:64px;border-radius:14px;background:var(--paper-3) center/cover;display:grid;place-items:center;color:var(--gold)}
+.nm{font:400 24px var(--serif)}.sub{font-size:13px;color:var(--ink-2)}
+.pill{display:inline-block;padding:4px 12px;border-radius:999px;font:500 12px var(--sans);background:var(--paper-2)}
+.sw{width:44px;height:26px;border-radius:26px;background:var(--paper-3);position:relative;display:inline-block}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .15s}
+.sw.on{background:var(--gold)}.sw.on::after{left:21px}
+td.act{text-align:right;white-space:nowrap}
+/* edit drawer */
+.scrim{position:fixed;inset:0;background:rgba(27,24,21,.35);display:none;z-index:10}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(1000px,100%);background:var(--paper);z-index:11;display:none;grid-template-columns:1fr 340px;overflow:auto;box-shadow:-20px 0 60px rgba(0,0,0,.18)}
+body.edit .scrim,body.edit .drawer{display:grid}body.edit .scrim{display:block}
+.form{padding:40px}
+.form h2{font-size:40px;margin-bottom:4px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.row4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.drop{border:1.5px dashed var(--line);border-radius:14px;padding:18px;text-align:center;color:var(--ink-2);font-size:14px;background:#fff}
+.formact{display:flex;gap:12px;margin-top:32px}
+.pv{background:var(--paper-2);padding:40px 28px;border-left:1px solid var(--line)}
+.pv .cam{aspect-ratio:3/4;border-radius:20px;background:url(img/hero.jpg) 50% 25%/cover;margin:12px 0 16px;position:relative;overflow:hidden}
+.pv .cam::after{content:"Live preview";position:absolute;left:12px;bottom:12px;padding:6px 14px;border-radius:999px;background:rgba(11,9,8,.7);color:#fff;font:500 11px var(--sans);letter-spacing:.2em;text-transform:uppercase}
+.warn{display:flex;gap:10px;font-size:13px;color:#8a5a12;background:#fbf0d9;border-radius:12px;padding:12px 14px;margin-top:14px}
+/* sign in */
+.login{position:fixed;inset:0;z-index:20;background:var(--paper);display:none;place-items:center;padding:20px}
+body.out .login{display:grid}
+.login form{width:100%;max-width:400px;display:flex;flex-direction:column;align-items:stretch;text-align:center}
+.login h1{font-size:44px;margin:12px 0 4px}
+.login .btn{margin-top:24px}
+.msg{padding:12px 16px;border-radius:12px;font-size:14px;background:#e6f2ea;color:var(--ok);margin-bottom:16px}
+@media(max-width:860px){.shell{padding:20px}.top{padding:14px 20px}.drawer{grid-template-columns:1fr}.pv{display:none}table .sub,th:nth-child(3),td:nth-child(3){display:none}}
+</style></head>
+<body>
+<div class="top"><div class="l"><span class="wordmark">Aura Luxe</span><span class="eyebrow">Catalog admin</span></div><button class="btn btn-sm" id="out">Sign out</button></div>
+<div class="shell">
+  <div class="head"><div><p class="eyebrow" style="margin-bottom:12px">Booth catalog</p><h1>Your pieces</h1></div><button class="btn btn-gold" data-edit="new"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add piece</button></div>
+  <div class="stats"><div><b>8</b><span>Pieces</span></div><div><b>6</b><span>Live on booth</span></div><div><b>2</b><span>Hidden</span></div></div>
+  <div class="tabs"><button class="on">All</button><button>Earrings</button><button>Necklaces</button></div>
+  <table>
+    <thead><tr><th></th><th>Piece</th><th>Type</th><th>Visible</th><th></th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<div class="drawer" role="dialog" aria-label="Edit piece">
+  <form class="form" onsubmit="return false">
+    <p class="eyebrow">Edit piece</p><h2 id="dTitle">Royal Kundan Jhumka</h2>
+    <label for="id">ID</label><input type="text" id="id" value="ear-001" readonly>
+    <div class="row2"><div><label for="name">Name</label><input type="text" id="name" value="Royal Kundan Jhumka"></div>
+    <div><label for="type">Type</label><select id="type"><option>Earrings</option><option>Necklace</option></select></div></div>
+    <div class="row2"><div><label for="mat">Material</label><select id="mat"><option>yellow-gold</option><option>rose-gold</option><option>silver</option></select></div>
+    <div><label>Model</label><div class="drop">Drop a .glb here, or browse</div></div></div>
+    <label>Thumbnail (square)</label><div class="drop">Drop an image here, or browse</div>
+    <label>Position on the face</label>
+    <div class="row4"><div><input type="number" value="0" step="0.01" aria-label="Offset X"><span class="sub">X</span></div><div><input type="number" value="0" step="0.01" aria-label="Offset Y"><span class="sub">Y</span></div><div><input type="number" value="0" step="0.01" aria-label="Offset Z"><span class="sub">Z</span></div><div><input type="number" value="1.25" step="0.05" aria-label="Scale"><span class="sub">Scale</span></div></div>
+    <label>Craft story (optional, up to 3)</label>
+    <input type="text" placeholder="Title (max 30)" value="Double-cut Kundan"><div style="height:10px"></div><input type="text" placeholder="Text (max 160)" value="Handcrafted gold filigree with uncut stones and micro-pearls.">
+    <div class="formact"><button class="btn btn-gold">Save piece</button><button class="btn" id="cancel" type="button">Cancel</button></div>
+  </form>
+  <aside class="pv"><p class="eyebrow">Preview on your face</p><div class="cam"></div><button class="btn btn-sm" style="width:100%">Start preview</button>
+    <div class="warn">Check the model is under the size limit before publishing.</div></aside>
+</div>
+
+<div class="login"><form onsubmit="document.body.classList.remove('out');return false">
+  <span class="wordmark" style="font-size:36px">Aura Luxe</span><h1>Staff sign in</h1><p class="muted">Catalog admin</p>
+  <label for="t" style="text-align:left">Admin token</label><input type="password" id="t" autocomplete="current-password" required>
+  <button class="btn btn-gold">Sign in</button></form></div>
+
+<script>
+const P=[["Royal Kundan Jhumka","ear-001","Earrings","22K gold · Pearl",1,"img/ear-001.jpg"],["Chandelier Diamond Drops","ear-003","Earrings","Rose gold",1,"img/hero.jpg 37% 44%/430%"],["Solitaire Diamond Studs","ear-002","Earrings","Silver",1],["Eternity Pavé Hoops","ear-004","Earrings","Yellow gold",0],["Heritage Polki Choker","neck-001","Necklace","Yellow gold",1,"img/neck-001.jpg"],["Imperial Rani Haar","neck-003","Necklace","Yellow gold",1,"img/hero.jpg 50% 66%/250%"],["Solitaire Diamond Pendant","neck-002","Necklace","Silver",1],["Imperial Ruby Amulet","neck-ruby-amulet","Necklace","Ruby",0]];
+const bg=s=>{if(!s)return"";const[u,p,z]=s.split(" ");return p?`style="background-image:url(${u});background-position:${p};background-size:${z.slice(z.indexOf('/')+1)}"`:`style="background-image:url(${u})"`};
+document.getElementById("rows").innerHTML=P.map((p,i)=>`<tr><td class="th"><i ${bg(p[5])}>${p[5]?"":"◇"}</i></td><td><div class="nm">${p[0]}</div><div class="sub">${p[1]} · ${p[3]}</div></td><td><span class="pill">${p[2]}</span></td><td><span class="sw ${p[4]?"on":""}" role="switch" aria-checked="${!!p[4]}"></span></td><td class="act"><button class="btn btn-sm" data-edit="${i}">Edit</button> <button class="btn btn-sm btn-danger">Delete</button></td></tr>`).join("");
+document.addEventListener("click",e=>{const b=e.target.closest("[data-edit]");if(b){document.getElementById("dTitle").textContent=b.dataset.edit==="new"?"New piece":P[b.dataset.edit][0];document.body.classList.add("edit")}
+ if(e.target.id==="scrim"||e.target.id==="cancel")document.body.classList.remove("edit");
+ if(e.target.id==="out")document.body.classList.add("out");
+ const s=e.target.closest(".sw");if(s)s.classList.toggle("on")});
+</script>
+</body></html>

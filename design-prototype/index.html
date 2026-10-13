@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jewelry Try-On Booth — Design Prototype</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<nav id="dev"></nav>
+<div id="stage">
+
+<!-- 4.1 Start -->
+<section class="screen on" id="start">
+  <div class="hero"><div class="wordmark">Brand</div></div>
+  <div class="start-body">
+    <h1 class="display" data-t="start.title"></h1>
+    <p class="body muted" data-t="start.sub"></p>
+    <button class="btn btn-primary pulse" data-go="notice" data-t="start.cta"></button>
+    <div class="lang"><b>EN</b> &nbsp;|&nbsp; हिन्दी</div>
+  </div>
+</section>
+
+<!-- 4.2 Privacy notice -->
+<section class="screen" id="notice">
+  <div class="notice">
+    <svg class="ico" style="width:72px;height:72px" viewBox="0 0 24 24"><path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.5"/></svg>
+    <h1 class="title" data-t="notice.title"></h1>
+    <p class="body">Your video stays on this screen. It is not recorded or uploaded. We don't identify you. Photos are saved only if you choose, and deleted after 24 hours. For adults, or children with a parent or guardian.</p>
+    <div class="row" style="align-items:center"><div class="qr-sm">QR</div><p class="caption muted">Terms and privacy: scan on your phone</p></div>
+    <div class="row">
+      <button class="btn btn-secondary" data-go="start" data-t="notice.decline"></button>
+      <button class="btn btn-primary" data-go="pick" data-t="notice.accept"></button>
+    </div>
+  </div>
+</section>
+
+<!-- 4.3 Pick -->
+<section class="screen" id="pick">
+  <div class="top"><button class="btn btn-text" data-go="start">← Home</button></div>
+  <h1 class="title" data-t="pick.title"></h1>
+  <div class="cats">
+    <div class="cat sel" data-cat="earrings">Earrings</div>
+    <div class="cat" data-cat="necklace">Necklaces</div>
+  </div>
+  <div class="sec" id="secName">Earrings</div>
+  <div class="grid" id="grid"></div>
+  <p class="body muted hint-bot" data-t="pick.hint"></p>
+</section>
+
+<!-- 4.4 Live -->
+<section class="screen" id="live">
+  <div class="bar">
+    <button class="btn" data-go="pick" aria-label="Back">←</button>
+    <div class="name" id="liveName">Jhumka Gold</div>
+    <button class="btn" data-sheet="details" data-t="live.details"></button>
+    <button class="btn" data-go="start" aria-label="Home">⌂</button>
+  </div>
+  <div class="chip" id="chip">Starting camera…</div>
+  <div class="face" id="face"></div>
+  <div class="face-t" id="faceT" data-t="live.guide"></div>
+  <div class="jew" style="left:395px;top:880px"></div>
+  <div class="jew" style="left:640px;top:880px"></div>
+  <div class="dock">
+    <div class="tabs"><button class="tab sel" data-cat2="earrings">Earrings</button><button class="tab" data-cat2="necklace">Necklaces</button></div>
+    <div class="car"><button class="arr btn">◀</button><div class="strip" id="strip"></div><button class="arr btn">▶</button></div>
+    <button class="shutter" id="shutter" aria-label="Take photo"></button>
+    <p class="small" style="color:var(--cam-text);opacity:.8" data-t="result.disclaimer"></p>
+  </div>
+  <div class="count" id="count">3</div>
+</section>
+
+<!-- 4.5 Photo preview -->
+<section class="screen" id="photoS">
+  <div class="photo"><div class="jew" style="left:300px;top:420px"></div><div class="jew" style="left:600px;top:420px"></div></div>
+  <h2 class="title center" data-t="photo.question"></h2>
+  <p class="caption muted center" style="margin:16px 0 32px">Deleted after 24 hours</p>
+  <div class="row">
+    <button class="btn btn-secondary" data-go="live" data-t="photo.retake"></button>
+    <button class="btn btn-primary" data-go="qrS" data-t="photo.save"></button>
+  </div>
+  <button class="btn btn-text" data-go="live" data-t="photo.discard"></button>
+</section>
+
+<!-- 4.6 QR -->
+<section class="screen" id="qrS">
+  <h1 class="title center" style="margin-top:96px" data-t="qr.title"></h1>
+  <div class="qr"></div>
+  <p class="body center muted" style="margin-top:48px">Open your phone camera and point it at the code. Link works for 24 hours.</p>
+  <button class="btn btn-primary" style="margin-top:auto" data-go="start">Done</button>
+  <p class="small">Auto-closing in 30 s</p>
+</section>
+
+<!-- Sheets: idle, details -->
+<div class="sheet-bg" id="details"><div class="sheet">
+  <p class="eyebrow">Double cut kundan</p>
+  <h2 class="title">Meenakari</h2>
+  <p class="body">One or two short lines about the craft. (Placeholder: real text comes from the business.)</p>
+  <div class="row"><button class="btn btn-secondary" data-close>Back to try-on</button><button class="btn btn-primary" data-close>Try it on</button></div>
+</div></div>
+<div class="sheet-bg" id="idle"><div class="sheet center">
+  <h1 class="title" data-t="idle.title"></h1><p class="body muted">Returning to start in <b id="idleN">10</b> s</p>
+  <button class="btn btn-primary" data-close>I'm here</button>
+</div></div>
+
+</div>
+<script src="app.js"></script>
+</body></html>

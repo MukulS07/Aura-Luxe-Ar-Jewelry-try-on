@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aura Luxe — Booth Redesign (1920×1080)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===== Tokens (placeholders until brand kit; swap here only) ===== */
+:root{
+  --paper:#FBFAF7;--paper-2:#F3EFE8;--paper-3:#E9E3D8;
+  --ink:#1B1815;--ink-2:#6B635A;
+  --line:rgba(27,24,21,.15);
+  --gold:#D8B56A;--gold-hi:#F0D898;--gold-press:#B8934A;--gold-ink:#8A6A22;--on-gold:#1A1206;
+  --night:#0B0908;--scrim:rgba(11,9,8,.72);--glass:rgba(251,250,247,.72);
+  --serif:"Cormorant Garamond","Playfair Display",Georgia,serif;
+  --sans:"Montserrat",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --m:64px;                 /* safe margin */
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#d9d4ca;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+/* 1920x1080 landscape stage, scaled to fit the window */
+#stage{width:1920px;height:1080px;position:absolute;left:50%;top:50%;transform-origin:center;overflow:hidden;background:var(--paper)}
+.screen{position:absolute;inset:0;display:none}
+.screen.on{display:flex;animation:in .32s var(--ease)}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== Type (min 24px) ===== */
+.display{font:400 116px/1 var(--serif);letter-spacing:-.01em}
+.display em{font-style:italic}
+.title{font:400 64px/1.05 var(--serif)}
+.sub{font:400 32px/1.4 var(--sans);color:var(--ink-2)}
+.body{font:400 30px/1.4 var(--sans)}
+.eyebrow{font:500 24px/1.6 var(--sans);letter-spacing:.3em;text-transform:uppercase;color:var(--gold-ink)}
+.caption{font:400 26px/1.4 var(--sans);color:var(--ink-2)}
+.muted{color:var(--ink-2)}
+
+/* ===== Buttons (>=96px) ===== */
+.btn{min-height:104px;padding:0 64px;border-radius:999px;font:600 28px var(--sans);letter-spacing:.1em;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;gap:20px;transition:transform .1s,background .1s;border:2px solid transparent}
+.btn:active{transform:scale(.97)}
+.btn-gold{background:linear-gradient(180deg,var(--gold-hi),var(--gold));color:var(--on-gold)}
+.btn-gold:active{background:var(--gold-press)}
+.btn-ghost{border-color:var(--line);color:var(--ink);background:rgba(255,255,255,.4)}
+.btn-ghost:active{background:var(--paper-3)}
+.btn-text{min-height:96px;padding:0 28px;color:var(--ink-2);letter-spacing:.04em;text-transform:none;font-weight:500;font-size:28px}
+.row{display:flex;gap:24px}.row>.btn{flex:1;padding:0 24px}
+.ico{width:44px;height:44px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.round{width:104px;height:104px;border-radius:50%;display:grid;place-items:center;background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--line)}
+
+/* ===== 1 START: photo left, paper right ===== */
+#start .photo{position:relative;flex:0 0 1000px;overflow:hidden;background:var(--night)}
+#start .photo::before{content:"";position:absolute;inset:0;background:url(img/hero.jpg) 50% 16%/cover;animation:drift 22s ease-in-out infinite alternate}
+@keyframes drift{from{transform:scale(1.02)}to{transform:scale(1.08)}}
+#start .photo::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(11,9,8,.45),rgba(11,9,8,0) 30%,rgba(11,9,8,0) 70%,rgba(11,9,8,.3))}
+#start .brand{position:absolute;left:0;right:0;bottom:80px;z-index:1;text-align:center;color:#F7F2E8}
+.wordmark{font:400 56px var(--serif);letter-spacing:.5em;padding-left:.5em}
+#start .brand .wordmark{font-size:112px;letter-spacing:.02em;padding:0;line-height:1;text-shadow:0 2px 40px rgba(0,0,0,.45)}
+.wordmark-sub{font:500 22px var(--sans);letter-spacing:.34em;text-transform:uppercase;margin-top:22px;padding-left:.34em}
+#start .copy{flex:1;display:flex;flex-direction:column;justify-content:center;gap:32px;padding:0 var(--m) 0 96px}
+.steps{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.step{display:flex;align-items:center;gap:28px;padding:16px 0;border-bottom:1px solid var(--line);font:500 26px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2)}
+.step b{font:400 52px var(--serif);color:var(--gold-ink);letter-spacing:0;width:44px}
+.cta{height:128px;font-size:32px;position:relative;width:100%}
+.cta::after{content:"";position:absolute;inset:-2px;border-radius:999px;border:2px solid var(--gold);animation:ring 2.6s ease-out infinite}
+@keyframes ring{from{transform:scale(1);opacity:.7}to{transform:scale(1.05,1.3);opacity:0}}
+.lang{display:flex;align-items:center;gap:8px;font:500 26px var(--sans);letter-spacing:.18em}
+.lang .btn-text{padding:0 24px}.lang .on{color:var(--ink);border-bottom:2px solid var(--gold)}
+
+/* ===== 2 NOTICE: centred card ===== */
+#notice{align-items:center;justify-content:center;background:linear-gradient(rgba(11,9,8,.62),rgba(11,9,8,.74)),url(img/hero.jpg) 50% 20%/cover}
+.ncard{width:1500px;background:var(--paper);border-radius:48px;padding:72px 80px;display:grid;grid-template-columns:520px 1fr;gap:80px;box-shadow:0 40px 100px rgba(0,0,0,.4)}
+.ncard .l{display:flex;flex-direction:column;gap:32px}
+.cam-badge{width:112px;height:112px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;color:var(--gold-ink)}
+.cam-badge .ico{width:52px;height:52px}
+.promises{list-style:none}
+.promises li{display:flex;gap:28px;align-items:center;padding:26px 0;border-top:1px solid var(--line);font:400 30px/1.35 var(--sans)}
+.promises li:first-child{border-top:0;padding-top:0}
+.promises .ico{color:var(--gold-ink);width:48px;height:48px}
+.terms{display:flex;align-items:center;gap:28px;margin-top:8px}
+.qr-sm{width:128px;height:128px;background:#fff;padding:10px;border-radius:12px;flex:none;border:1px solid var(--line)}
+.qr-sm svg,.qr svg{width:100%;height:100%;display:block}
+.ncard .row{margin-top:32px}
+
+/* ===== 3 PICK: left categories, right grid ===== */
+#pick{padding:var(--m) var(--m) 0;gap:64px}
+#pick .left{flex:0 0 640px;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;min-height:104px;margin-left:-28px}
+.topbar .btn-text{gap:16px;color:var(--ink)}
+.pick-head{margin:40px 0 40px;display:flex;flex-direction:column;gap:22px}
+.cats{display:flex;gap:24px;flex:1;margin-bottom:var(--m)}
+.cat{position:relative;flex:1;border-radius:32px;overflow:hidden;border:3px solid transparent;transition:border-color .2s}
+.cat .img{position:absolute;inset:0;background-size:cover;filter:grayscale(1) contrast(1.05);transition:filter .4s,transform .6s var(--ease)}
+.cat::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(11,9,8,.72),rgba(11,9,8,0) 55%)}
+.cat .lbl{position:absolute;left:0;right:0;bottom:36px;z-index:1;text-align:center;font:400 52px var(--serif);color:#fff}
+.cat.on{border-color:var(--gold)}.cat.on .img{filter:none;transform:scale(1.04)}
+#pick .right{flex:1;display:flex;flex-direction:column;min-width:0}
+.sec{display:flex;justify-content:space-between;align-items:baseline;padding:48px 0 20px;border-bottom:1px solid var(--line);margin-bottom:28px;flex:none;min-height:150px}
+.sec h2{font:400 64px var(--serif)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px 28px;flex:1;min-height:0;overflow-y:auto;align-content:start;padding-bottom:72px;-webkit-mask-image:linear-gradient(to bottom,#000 88%,transparent);mask-image:linear-gradient(to bottom,#000 88%,transparent);scrollbar-width:none}
+.card{text-align:left;display:flex;flex-direction:column;gap:14px;transition:transform .1s}
+.card:active{transform:scale(.98)}
+.card .th{aspect-ratio:1/.72;border-radius:24px;background-color:var(--paper-2);background-size:cover}
+.card .th.ph{display:grid;place-items:center;color:var(--gold)}
+.card .th.ph .ico{width:88px;height:88px;stroke-width:1.3}
+.card .nm{font:400 38px/1.1 var(--serif);padding:0 4px}
+.card .mt{font:500 22px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);padding:0 4px;margin-top:-2px}
+.pick-hint{position:absolute;right:var(--m);bottom:28px;font:400 24px var(--sans);color:var(--ink-2);background:var(--paper);padding-left:16px}
+
+/* ===== 4 LIVE ===== */
+#live{background:#000;color:#F7F2E8;--ink:#F7F2E8;--ink-2:rgba(247,242,232,.78);--gold-ink:var(--gold);--glass:rgba(21,17,15,.5);--line:rgba(247,242,232,.25)}
+#live .cam{position:absolute;inset:0;background:url(img/hero.jpg) 50% 24%/cover;transform:scaleX(-1)}
+#live .cam::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.15)}
+#live .cam video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s}
+#live .cam.on{background-image:none;background-color:#000}
+#live .cam.on video{opacity:1}
+#live .cam-note{position:absolute;top:156px;right:var(--m);font:500 22px var(--sans);letter-spacing:.3em;color:rgba(255,255,255,.45);text-transform:uppercase}
+.lbar{position:absolute;top:0;left:0;right:0;z-index:3;display:flex;align-items:center;gap:24px;padding:40px var(--m) 64px;background:linear-gradient(to bottom,rgba(11,9,8,.8),rgba(11,9,8,0))}
+.lbar .name{flex:1;text-align:center;min-width:0}
+.lbar .name small{display:block;font:500 22px var(--sans);letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.lbar .name span{font:400 52px/1.05 var(--serif);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.craft{min-height:104px;padding:0 40px;border-radius:999px;background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--line);font:600 24px var(--sans);letter-spacing:.16em;text-transform:uppercase;display:flex;align-items:center;gap:14px}
+.craft .ico{width:34px;height:34px;color:var(--gold)}
+.chip{position:absolute;z-index:3;top:170px;left:50%;transform:translateX(-50%);background:var(--scrim);backdrop-filter:blur(12px);padding:18px 36px;border-radius:999px;font:500 28px var(--sans);display:flex;gap:16px;align-items:center;white-space:nowrap;transition:opacity .4s;border:1px solid var(--line)}
+.chip .dot{width:14px;height:14px;border-radius:50%;background:var(--gold);animation:blink 1.2s infinite}
+@keyframes blink{50%{opacity:.25}}
+.chip.hide{opacity:0}
+.guide{position:absolute;z-index:2;left:50%;top:150px;width:440px;height:570px;margin-left:-220px;border-radius:50%;border:3px dashed rgba(245,238,224,.6);transition:opacity 1s}
+.guide.off{opacity:0}
+.guide-t{position:absolute;z-index:2;left:0;right:0;top:740px;text-align:center;font:italic 400 38px var(--serif);transition:opacity 1s;text-shadow:0 2px 12px #000}
+.dock{position:absolute;z-index:3;left:0;right:0;bottom:0;padding:130px var(--m) 60px;background:linear-gradient(to top,rgba(11,9,8,.95) 0,rgba(11,9,8,.86) 55%,rgba(11,9,8,0));display:flex;align-items:center;gap:40px}
+.tabs{display:flex;flex-direction:column;gap:12px;padding:8px;border-radius:44px;background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--line);flex:none}
+.tab{min-height:80px;padding:0 44px;border-radius:999px;font:600 24px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);transition:background .2s,color .2s}
+.tab.on{background:linear-gradient(180deg,var(--gold-hi),var(--gold));color:var(--on-gold)}
+.car{display:flex;align-items:center;gap:16px;flex:1;min-width:0}
+.car .arr{width:88px;height:88px;border-radius:50%;background:var(--glass);border:1px solid var(--line);display:grid;place-items:center;flex:none}
+.strip{display:flex;gap:24px;overflow:hidden;flex:1;padding:10px 4px}
+.thumb{flex:none;width:168px;display:flex;flex-direction:column;gap:10px;align-items:center}
+.thumb .t{width:168px;height:168px;border-radius:32px;border:2px solid var(--line);background-color:#15110F;background-size:cover;display:grid;place-items:center;color:rgba(216,181,106,.6);transition:border-color .2s,transform .2s}
+.thumb .t .ico{width:68px;height:68px;stroke-width:1.5}
+.thumb span{font:500 22px var(--sans);letter-spacing:.04em;color:var(--ink-2);max-width:168px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.thumb.on .t{border:4px solid var(--gold);transform:translateY(-6px)}
+.thumb.on span{color:var(--gold-hi)}
+.shutter{width:152px;height:152px;border-radius:50%;border:5px solid #F7F2E8;padding:10px;flex:none}
+.shutter i{display:block;width:100%;height:100%;border-radius:50%;background:linear-gradient(180deg,var(--gold-hi),var(--gold));transition:transform .1s}
+.shutter:active i{transform:scale(.9)}
+.disclaimer{position:absolute;left:0;right:0;bottom:12px;text-align:center;font:400 22px var(--sans);color:rgba(245,238,224,.6)}
+.count{position:absolute;inset:0;z-index:8;background:var(--scrim);display:none;place-items:center;font:400 360px var(--serif);color:var(--gold-hi)}
+.count.on{display:grid}
+.flash{position:absolute;inset:0;z-index:9;background:#fff;opacity:0;pointer-events:none}
+.flash.go{animation:flash .5s ease-out}
+@keyframes flash{from{opacity:.95}to{opacity:0}}
+
+/* ===== 5 PHOTO: photo left, actions right ===== */
+#photoS{padding:var(--m);gap:96px;align-items:center}
+.frame{flex:0 0 1100px;padding:28px;border:1px solid var(--line);border-radius:8px;background:#fff;box-shadow:0 30px 70px rgba(27,24,21,.16)}
+.frame .img{width:100%;aspect-ratio:4/3;background:url(img/hero.jpg) 50% 22%/cover;position:relative}
+.frame .img::after{content:"Aura Luxe";position:absolute;bottom:24px;left:0;right:0;text-align:center;font:400 30px var(--serif);letter-spacing:.4em;color:rgba(255,255,255,.9);text-shadow:0 2px 10px #000}
+.pright{flex:1;display:flex;flex-direction:column;gap:28px}
+.pright .btn{width:100%}
+
+/* ===== 6 QR: text left, code right ===== */
+#qrS{padding:var(--m) 96px var(--m) 120px;gap:120px;align-items:center}
+#qrS .l{flex:1;display:flex;flex-direction:column;gap:36px}
+.qr-steps{list-style:none;border-top:1px solid var(--line)}
+.qr-steps li{display:flex;align-items:center;gap:28px;padding:24px 0;border-bottom:1px solid var(--line);font:400 32px var(--sans)}
+.qr-steps b{font:400 56px var(--serif);color:var(--gold-ink);width:44px}
+.qr-card{flex:0 0 720px;height:720px;background:#fff;border-radius:40px;padding:64px;border:1px solid var(--line);box-shadow:0 0 0 14px rgba(216,181,106,.18),0 30px 70px rgba(27,24,21,.15)}
+.qr{width:100%;height:100%}
+.timer{height:6px;width:100%;border-radius:6px;background:var(--paper-3);overflow:hidden}
+.timer i{display:block;height:100%;background:var(--gold);transform-origin:left;animation:t 30s linear forwards}
+@keyframes t{to{transform:scaleX(0)}}
+
+/* ===== Sheets ===== */
+.sheet-bg{position:absolute;inset:0;z-index:20;background:rgba(11,9,8,.58);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center}
+.sheet-bg.on{display:flex;animation:in .3s var(--ease)}
+.bsheet{background:var(--paper);border-radius:48px;box-shadow:0 40px 100px rgba(0,0,0,.4)}
+#story .bsheet{width:1500px;display:grid;grid-template-columns:640px 1fr;overflow:hidden}
+.macro{min-height:700px;background:url(img/ear-001.jpg) 50% 62%/170% auto;position:relative}
+.macro .tag{position:absolute;left:28px;bottom:28px;padding:14px 26px;border-radius:999px;background:var(--scrim);backdrop-filter:blur(10px);font:500 22px var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--gold-hi)}
+.sbody{padding:72px 80px;display:flex;flex-direction:column;gap:28px;justify-content:center}
+.dots{display:flex;gap:12px}.dots i{width:14px;height:14px;border-radius:50%;background:var(--paper-3)}.dots i.on{background:var(--gold);width:44px;border-radius:14px}
+#idle .bsheet{width:900px;padding:72px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:28px}
+.ring{width:200px;height:200px;position:relative;display:grid;place-items:center;font:400 84px var(--serif)}
+.ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:6}
+.ring .bg{stroke:var(--paper-3)}.ring .fg{stroke:var(--gold);stroke-dasharray:565;stroke-dashoffset:0;animation:cd 10s linear forwards}
+@keyframes cd{to{stroke-dashoffset:565}}
+
+/* prototype-only nav */
+nav#dev{position:fixed;left:10px;top:10px;z-index:99;display:flex;flex-direction:column;gap:4px;background:rgba(0,0,0,.7);padding:8px;border-radius:10px}
+nav#dev b{font:600 10px sans-serif;color:#aaa;letter-spacing:.1em;text-transform:uppercase}
+nav#dev button{font:12px sans-serif;padding:5px 10px;border-radius:6px;background:#2a2a2a;color:#eee;text-align:left}
+nav#dev button.on{background:#d8b56a;color:#111}
+</style></head>
+<body>
+<nav id="dev"><b>Screens</b></nav>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+  <symbol id="i-cam" viewBox="0 0 24 24"><path d="M3 8h4l1.6-2.4h6.8L17 8h4v11H3z"/><circle cx="12" cy="13" r="3.6"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="9" r="3.5"/><path d="M5 20c1-4 4-5.5 7-5.5s6 1.5 7 5.5"/><path d="M3 3l18 18"/></symbol>
+  <symbol id="i-save" viewBox="0 0 24 24"><path d="M12 4v10M8 10l4 4 4-4"/><path d="M5 19h14"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></symbol>
+  <symbol id="i-ear" viewBox="0 0 24 24"><circle cx="12" cy="6" r="2"/><path d="M12 8v3"/><path d="M8 16c0-3 1.8-5 4-5s4 2 4 5-1.8 5-4 5-4-2-4-5z"/></symbol>
+  <symbol id="i-neck" viewBox="0 0 24 24"><path d="M4 5c0 9 3.5 13 8 13s8-4 8-13"/><path d="M12 18v3"/></symbol>
+</defs></svg>
+
+<div id="stage">
+
+<!-- 1 START -->
+<section class="screen on" id="start">
+  <div class="photo"><div class="brand"><div class="wordmark">Aura Luxe</div><div class="wordmark-sub">Fine jewellery · Virtual try-on</div></div></div>
+  <div class="copy">
+    <h1 class="display">See it on <em>you</em></h1>
+    <p class="sub">Try earrings and necklaces on your own reflection.</p>
+    <div class="steps"><div class="step"><b>1</b>Choose a piece</div><div class="step"><b>2</b>Try it on</div><div class="step"><b>3</b>Take it home</div></div>
+    <button class="btn btn-gold cta" data-go="notice">Touch to begin <svg class="ico"><use href="#i-arrow"/></svg></button>
+    <div class="lang"><button class="btn btn-text on">EN</button><span class="muted">·</span><button class="btn btn-text">हिन्दी</button></div>
+  </div>
+</section>
+
+<!-- 2 NOTICE -->
+<section class="screen" id="notice">
+  <div class="ncard">
+    <div class="l">
+      <div class="cam-badge"><svg class="ico"><use href="#i-cam"/></svg></div>
+      <div><p class="eyebrow" style="margin-bottom:24px">Before we turn on the camera</p><h1 class="title">Your mirror stays private</h1></div>
+      <div class="terms"><div class="qr-sm" data-qr></div><p class="caption">Adults, or children with a parent or guardian.<br>Full terms: scan on your phone.</p></div>
+    </div>
+    <div>
+      <ul class="promises">
+        <li><svg class="ico"><use href="#i-lock"/></svg>Video stays on this screen. Never recorded or uploaded.</li>
+        <li><svg class="ico"><use href="#i-user"/></svg>We never identify you.</li>
+        <li><svg class="ico"><use href="#i-save"/></svg>Photos save only if you choose, and vanish after 24 hours.</li>
+      </ul>
+      <div class="row"><button class="btn btn-ghost" data-go="start">No thanks</button><button class="btn btn-gold" data-go="pick">Accept</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 PICK -->
+<section class="screen" id="pick">
+  <div class="left">
+    <div class="topbar"><button class="btn btn-text" data-go="start"><svg class="ico"><use href="#i-back"/></svg>Home</button></div>
+    <div class="pick-head"><p class="eyebrow">The collection</p><h1 class="title">What would you<br>like to wear?</h1></div>
+    <div class="cats" id="cats">
+      <button class="cat on" data-cat="earrings"><div class="img" style="background-image:url(img/hero.jpg);background-position:37% 44%;background-size:420%"></div><span class="lbl">Earrings</span></button>
+      <button class="cat" data-cat="necklace"><div class="img" style="background-image:url(img/hero.jpg);background-position:50% 66%;background-size:280%"></div><span class="lbl">Necklaces</span></button>
+    </div>
+  </div>
+  <div class="right">
+    <div class="sec"><h2 id="secName">Earrings</h2><span class="caption" id="secCount"></span></div>
+    <div class="grid" id="grid"></div>
+  </div>
+  <p class="pick-hint">Tap a piece to try it on</p>
+</section>
+
+<!-- 4 LIVE -->
+<section class="screen" id="live">
+  <div class="cam" id="cam"><video id="camVideo" autoplay playsinline muted></video></div>
+  <div class="cam-note" id="camNote">Starting camera…</div>
+  <div class="lbar">
+    <button class="round" data-go="pick" aria-label="Back"><svg class="ico"><use href="#i-back"/></svg></button>
+    <div class="name"><small id="liveType">Earrings</small><span id="liveName"></span></div>
+    <button class="craft" id="craftBtn" data-sheet="story"><svg class="ico"><use href="#i-spark"/></svg>Craft story</button>
+    <button class="round" data-go="start" aria-label="Home"><svg class="ico"><use href="#i-home"/></svg></button>
+  </div>
+  <div class="chip" id="chip"><span class="dot"></span><span id="chipT">Starting camera…</span></div>
+  <div class="guide" id="guide"></div><div class="guide-t" id="guideT">Look at the camera</div>
+  <div class="dock">
+    <div class="tabs"><button class="tab on" data-cat2="earrings">Earrings</button><button class="tab" data-cat2="necklace">Necklaces</button></div>
+    <div class="car"><button class="arr" data-scroll="-1" aria-label="Previous"><svg class="ico"><use href="#i-back"/></svg></button><div class="strip" id="strip"></div><button class="arr" data-scroll="1" aria-label="Next"><svg class="ico"><use href="#i-next"/></svg></button></div>
+    <button class="shutter" id="shutter" aria-label="Take photo"><i></i></button>
+    <p class="disclaimer">Results are approximate. Real pieces may differ.</p>
+  </div>
+  <div class="count" id="count">3</div><div class="flash" id="flash"></div>
+</section>
+
+<!-- 5 PHOTO -->
+<section class="screen" id="photoS">
+  <div class="frame"><div class="img"></div></div>
+  <div class="pright">
+    <p class="eyebrow">Your portrait</p>
+    <h1 class="title">Keep this photo?</h1>
+    <p class="sub">Saved only if you tap Save. Deleted after 24 hours.</p>
+    <div style="height:12px"></div>
+    <button class="btn btn-gold" data-go="qrS">Save &amp; get link</button>
+    <button class="btn btn-ghost" data-go="live">Retake</button>
+    <button class="btn btn-text" data-go="live">Don't save</button>
+  </div>
+</section>
+
+<!-- 6 QR -->
+<section class="screen" id="qrS">
+  <div class="l">
+    <p class="eyebrow">Saved</p>
+    <h1 class="title">Scan to<br>take it home</h1>
+    <ol class="qr-steps"><li><b>1</b>Open your phone camera</li><li><b>2</b>Point it at the code</li><li><b>3</b>Tap the link</li></ol>
+    <p class="caption">Link works for 24 hours.</p>
+    <button class="btn btn-gold" data-go="start">Done</button>
+    <div class="timer"><i></i></div>
+  </div>
+  <div class="qr-card"><div class="qr" data-qr></div></div>
+</section>
+
+<!-- Sheets -->
+<div class="sheet-bg" id="story"><div class="bsheet">
+  <div class="macro"><span class="tag" id="sTag">Kundan setting</span></div>
+  <div class="sbody">
+    <div><p class="eyebrow" id="sEy" style="margin-bottom:20px">Royal Kundan Jhumka</p><h2 class="title" id="sTitle">Double-cut Kundan</h2></div>
+    <p class="body muted" id="sText"></p>
+    <div class="dots"><i class="on"></i><i></i><i></i></div>
+    <div class="row"><button class="btn btn-ghost" data-close>Back</button><button class="btn btn-gold" data-close>Try it on</button></div>
+  </div>
+</div></div>
+
+<div class="sheet-bg" id="idle"><div class="bsheet">
+  <div class="ring"><svg viewBox="0 0 200 200"><circle class="bg" cx="100" cy="100" r="90"/><circle class="fg" cx="100" cy="100" r="90"/></svg><span id="idleN">10</span></div>
+  <h1 class="title">Still there?</h1><p class="sub">We'll clear the screen and start over.</p>
+  <button class="btn btn-gold" style="width:100%" data-close>I'm here</button>
+</div></div>
+
+</div>
+<script>
+// Prototype only: no camera, no tracking. Photos: ear-001, neck-001, hero crops. Others are placeholders awaiting photography.
+const CATALOG=[
+ {id:"ear-001",n:"Royal Kundan Jhumka",t:"earrings",m:"22K gold · Pearl",img:"img/ear-001.jpg",pos:"50% 60%",size:"140%",story:["Double-cut Kundan","Handcrafted gold filigree with uncut stones and cascading micro-pearls."]},
+ {id:"ear-003",n:"Chandelier Drops",t:"earrings",m:"Gold · Diamond",img:"img/hero.jpg",pos:"37% 44%",size:"430%"},
+ {id:"ear-002",n:"Solitaire Studs",t:"earrings",m:"Platinum · Diamond"},
+ {id:"ear-004",n:"Eternity Hoops",t:"earrings",m:"Gold · Pavé"},
+ {id:"neck-001",n:"Heritage Polki Choker",t:"necklace",m:"Gold · Emerald",img:"img/neck-001.jpg",pos:"50% 50%",size:"150%",story:["Polki & emerald","Uncut Polki set in antique gold, hung with carved emerald drops."]},
+ {id:"neck-003",n:"Imperial Rani Haar",t:"necklace",m:"Gold · Diamond",img:"img/hero.jpg",pos:"50% 65%",size:"260%"},
+ {id:"neck-002",n:"Solitaire Pendant",t:"necklace",m:"Silver · Diamond"},
+ {id:"neck-004",n:"Ruby Amulet",t:"necklace",m:"Gold · Ruby"}];
+const IDLE_WARN_MS=45000,IDLE_RESET_S=10; // proposed
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const stage=$("#stage");
+const fit=()=>stage.style.transform=`translate(-50%,-50%) scale(${Math.min(innerWidth/1920,innerHeight/1080)})`;
+addEventListener("resize",fit);fit();
+
+// placeholder QR (not scannable)
+function fakeQR(){const n=29,c=[];let s=7;const r=()=>(s=(s*16807)%2147483647)/2147483647;
+ const fi=(x,y)=>{for(const[ox,oy]of[[0,0],[n-7,0],[0,n-7]]){const dx=x-ox,dy=y-oy;if(dx>=0&&dx<7&&dy>=0&&dy<7)return(dx==0||dx==6||dy==0||dy==6||(dx>=2&&dx<=4&&dy>=2&&dy<=4))?1:0;if(dx>=-1&&dx<8&&dy>=-1&&dy<8)return 0}return null};
+ for(let y=0;y<n;y++)for(let x=0;x<n;x++){const f=fi(x,y);if(f===1||(f===null&&r()>.52))c.push(`<rect x="${x}" y="${y}" width="1.02" height="1.02"/>`)}
+ return`<svg viewBox="0 0 ${n} ${n}" shape-rendering="crispEdges" fill="#111">${c.join("")}</svg>`}
+$$("[data-qr]").forEach(e=>e.innerHTML=fakeQR());
+
+let cat="earrings",cur=CATALOG[0],idleT,idleI;
+const by=t=>CATALOG.filter(p=>p.t===t);
+const art=p=>p.img?`style="background-image:url(${p.img});background-position:${p.pos};background-size:${p.size}"`:"";
+const glyph=p=>`<svg class="ico"><use href="#i-${p.t==="earrings"?"ear":"neck"}"/></svg>`;
+
+// ---- camera (runs only on the live screen, after the privacy notice; never recorded or uploaded) ----
+let camStream=null,shotUrl="";
+async function startCam(){
+  const note=$("#camNote");
+  if(camStream)return;
+  try{
+    if(!navigator.mediaDevices?.getUserMedia)throw new Error("unsupported");
+    camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:1280},height:{ideal:720}},audio:false});
+    if(!$("#live").classList.contains("on")){stopCam();return} // left the screen while the prompt was open
+    const v=$("#camVideo");v.srcObject=camStream;await v.play();
+    $("#cam").classList.add("on");note.style.display="none";
+  }catch{
+    camStream=null;note.style.display="";note.textContent="Camera unavailable · showing a sample photo";
+  }
+}
+function stopCam(){
+  camStream?.getTracks().forEach(t=>t.stop());camStream=null;
+  const v=$("#camVideo");v.srcObject=null;$("#cam").classList.remove("on");
+}
+/** Current camera frame as a mirrored JPEG data URL, or "" when there is no camera. */
+function grabFrame(){
+  const v=$("#camVideo");if(!camStream||!v.videoWidth)return"";
+  const c=document.createElement("canvas");c.width=v.videoWidth;c.height=v.videoHeight;
+  const g=c.getContext("2d");g.translate(c.width,0);g.scale(-1,1);g.drawImage(v,0,0);
+  return c.toDataURL("image/jpeg",.9);
+}
+
+function go(id){
+  $$(".screen").forEach(s=>s.classList.toggle("on",s.id===id));
+  $$(".sheet-bg").forEach(s=>s.classList.remove("on"));
+  $$("#dev button").forEach(b=>b.classList.toggle("on",b.dataset.go===id));
+  clearInterval(idleI);
+  if(id!=="live")stopCam();               // camera off everywhere except the live screen
+  if(id==="start"){shotUrl="";$(".frame .img").style.backgroundImage=""} // a photo never outlives the session
+  if(id==="photoS")$(".frame .img").style.backgroundImage=shotUrl?`url(${shotUrl})`:"";
+  if(id==="pick")renderPick(); if(id==="live"){startLive();startCam()}
+  if(id==="start")clearTimeout(idleT);else bump();
+}
+function bump(){clearTimeout(idleT);idleT=setTimeout(idle,IDLE_WARN_MS)}
+function idle(){let n=IDLE_RESET_S;$("#idleN").textContent=n;$("#idle").classList.add("on");
+  const fg=$(".ring .fg");fg.style.animation="none";fg.getBoundingClientRect();fg.style.animation="";
+  idleI=setInterval(()=>{$("#idleN").textContent=--n;if(n<=0)go("start")},1000)}
+
+function renderPick(){
+  $$("#cats .cat").forEach(b=>b.classList.toggle("on",b.dataset.cat===cat));
+  const list=by(cat);
+  $("#secName").textContent=cat==="earrings"?"Earrings":"Necklaces";$("#secCount").textContent=list.length+" pieces";
+  $("#grid").innerHTML=list.map(p=>`<button class="card" data-pick="${p.id}"><div class="th ${p.img?"":"ph"}" ${art(p)}>${p.img?"":glyph(p)}</div><div class="nm">${p.n}</div><div class="mt">${p.m}</div></button>`).join("");
+}
+function renderStrip(){
+  $$(".tab").forEach(t=>t.classList.toggle("on",t.dataset.cat2===cat));
+  $("#strip").innerHTML=by(cat).map(p=>`<button class="thumb ${p.id===cur.id?"on":""}" data-sw="${p.id}"><div class="t" ${art(p)}>${p.img?"":glyph(p)}</div><span>${p.n}</span></button>`).join("");
+  $("#liveName").textContent=cur.n;$("#liveType").textContent=cur.t==="earrings"?"Earrings":"Necklace";
+  $("#craftBtn").style.display=cur.story?"flex":"none";
+}
+function startLive(){
+  renderStrip();const g=$("#guide"),gt=$("#guideT"),c=$("#chip");
+  g.classList.remove("off");gt.style.opacity=1;c.classList.remove("hide");$("#chipT").textContent="Starting camera…";
+  setTimeout(()=>$("#chipT").textContent="Step a little closer",1300);
+  setTimeout(()=>{g.classList.add("off");gt.style.opacity=0;c.classList.add("hide")},3300);
+}
+document.addEventListener("click",e=>{
+  bump();const el=e.target.closest("button");if(!el)return;
+  const d=el.dataset;
+  if(d.go)go(d.go);
+  else if(d.cat){cat=d.cat;renderPick()}
+  else if(d.cat2){cat=d.cat2;cur=by(cat)[0];renderStrip()}
+  else if(d.pick){cur=CATALOG.find(p=>p.id===d.pick);go("live")}
+  else if(d.sw){cur=CATALOG.find(p=>p.id===d.sw);renderStrip()}
+  else if(d.scroll)$("#strip").scrollBy({left:d.scroll*360,behavior:"smooth"});
+  else if(d.sheet){const s=cur.story||["Craft","Story"];$("#sEy").textContent=cur.n;$("#sTitle").textContent=s[0];$("#sText").textContent=s[1];$("#sTag").textContent=s[0];$("#"+d.sheet).classList.add("on")}
+  else if("close"in d){el.closest(".sheet-bg").classList.remove("on");clearInterval(idleI)}
+  else if(el.id==="shutter"){let n=3;const c=$("#count");c.textContent=n;c.classList.add("on");
+    const i=setInterval(()=>{if(--n>0)c.textContent=n;else{clearInterval(i);c.classList.remove("on");shotUrl=grabFrame();const f=$("#flash");f.classList.remove("go");f.getBoundingClientRect();f.classList.add("go");setTimeout(()=>go("photoS"),350)}},1000)}
+});
+$("#dev").innerHTML+=[["start","1 Start"],["notice","2 Notice"],["pick","3 Pick"],["live","4 Live"],["photoS","5 Photo"],["qrS","6 QR"]].map(([k,l])=>`<button data-go="${k}">${l}</button>`).join("")+`<button data-sheet="story">Craft story</button><button id="devIdle">Idle</button>`;
+$("#devIdle").onclick=e=>{e.stopPropagation();idle()};
+$$("#dev button").forEach(b=>b.classList.toggle("on",b.dataset.go==="start"));
+renderPick();
+{const h=location.hash.slice(1);
+ if(location.search.includes("clean"))$("#dev").style.display="none";
+ if(h==="story"){go("live");document.querySelector("[data-sheet=story]").click()}
+ else if(h==="idle"){go("pick");idle()}
+ else if(h)go(h);}
+</script>
+</body></html>

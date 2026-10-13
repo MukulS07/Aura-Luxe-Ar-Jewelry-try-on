@@ -1,0 +1,35 @@
+<title>Aura Luxe Redesign</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Montserrat:wght@400;500;600&display=swap">
+<style>
+/* Layout: one column index of the five redesigned screens, paper look matching the booth */
+:root{--bg:#FBFAF7;--fg:#1B1815;--muted:#6B635A;--line:rgba(27,24,21,.15);--gold:#D8B56A;--gold-ink:#8A6A22;--card:#F3EFE8;
+ --serif:"Cormorant Garamond",Georgia,serif;--sans:"Montserrat",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12100E;--fg:#F5EEE0;--muted:#B9AE9B;--line:rgba(245,238,224,.18);--gold-ink:#D8B56A;--card:#1C1815;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12100E;--fg:#F5EEE0;--muted:#B9AE9B;--line:rgba(245,238,224,.18);--gold-ink:#D8B56A;--card:#1C1815;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:400 16px/1.55 var(--sans);padding-inline:20px;padding-block:56px}
+main{max-width:760px;margin:0 auto}
+.eyebrow{font:500 12px/1.6 var(--sans);letter-spacing:.3em;text-transform:uppercase;color:var(--gold-ink)}
+h1{font:400 clamp(44px,9vw,84px)/1 var(--serif);margin:14px 0 18px;text-wrap:balance}
+h1 em{font-style:italic}
+p.lead{color:var(--muted);font-size:18px;max-width:52ch}
+ul{list-style:none;margin-top:44px;border-top:1px solid var(--line)}
+li a{display:grid;grid-template-columns:1fr auto;gap:4px 16px;align-items:center;padding:24px 0;border-bottom:1px solid var(--line);text-decoration:none;color:inherit}
+li a:hover b{color:var(--gold-ink)}
+li b{font:400 30px/1.1 var(--serif)}
+li span{grid-column:1;color:var(--muted);font-size:14px;min-width:0}
+li i{grid-row:1/3;grid-column:2;font:500 12px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-ink);font-style:normal}
+a:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+.note{margin-top:36px;color:var(--muted);font-size:13px}
+</style>
+<main>
+  <p class="eyebrow">Design prototype</p>
+  <h1>Aura Luxe, <em>redesigned</em></h1>
+  <p class="lead">The booth and its companion pages. Click through the booth screens, then open the phone, staff and terms pages.</p>
+  <ul>
+    <li><a href="booth.html"><b>Booth</b><span>Kiosk flow at 1920×1080: start, notice, pick, live try-on, photo, QR, craft story.</span><i>Open →</i></a></li>
+    <li><a href="share.html"><b>Share page</b><span>What a visitor sees on their phone after scanning the QR.</span><i>Open →</i></a></li>
+    <li><a href="admin.html"><b>Catalog admin</b><span>Staff sign-in, piece list and edit drawer. Best on a desktop screen.</span><i>Open →</i></a></li>
+    <li><a href="terms.html"><b>Terms and privacy</b><span>Short, plain-language terms.</span><i>Open →</i></a></li>
+  </ul>
+  <p class="note">Camera view, QR codes and some piece photos are stand-ins.</p>
+</main>

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Your photo — Aura Luxe</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<style>
+body{display:flex;justify-content:center}
+main{width:100%;max-width:520px;padding:20px 16px 0;display:flex;flex-direction:column;align-items:center;text-align:center}
+header{padding:20px 0 28px}
+.hero{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+h1{font-size:44px;line-height:1.05}
+h1 em{font-style:italic}
+.frame{width:100%;padding:14px;background:#fff;border-radius:6px;box-shadow:0 20px 50px rgba(27,24,21,.14);border:1px solid var(--line)}
+.frame .img{aspect-ratio:4/5;background:url(img/hero.jpg) 50% 25%/cover;position:relative}
+.frame .img::after{content:"Aura Luxe";position:absolute;bottom:14px;left:0;right:0;font:400 20px var(--serif);letter-spacing:.2em;color:rgba(255,255,255,.9);text-shadow:0 1px 8px #000}
+.note{margin:24px 0 28px;font-size:14px;color:var(--ink-2);max-width:380px}
+.note b{color:var(--ink);font-weight:600}
+.actions{width:100%;display:flex;flex-direction:column;gap:12px}
+.actions .btn{width:100%}
+.del{margin-top:8px;border:0;background:none;color:var(--danger);font:500 14px var(--sans);min-height:48px;cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+.try{margin:40px 0 0;width:100%;padding:28px 20px;border-radius:24px;background:var(--paper-2);display:flex;flex-direction:column;gap:12px;align-items:center}
+.try h2{font-size:30px}
+.gone{display:none;padding:96px 16px;flex-direction:column;gap:12px;align-items:center}
+.gone h1{font-size:34px}
+body.is-gone .ok{display:none}body.is-gone .gone{display:flex}
+</style></head>
+<body>
+<main>
+  <header><div class="wordmark">Aura Luxe</div></header>
+
+  <section class="ok" style="width:100%;display:flex;flex-direction:column;align-items:center">
+    <div class="hero"><p class="eyebrow">Your try-on</p><h1>Here's your <em>photo</em></h1></div>
+    <div class="frame"><div class="img" role="img" aria-label="Your photo with the jewelry"></div></div>
+    <p class="note">Available until <b>tomorrow, 4:30 PM</b>. Results are approximate. Real pieces may differ.</p>
+    <div class="actions">
+      <a class="btn btn-gold" href="img/hero.jpg" download="my-jewelry-photo.jpg"><svg viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>Download</a>
+      <button class="btn" id="share"><svg viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M6 12v8h12v-8"/></svg>Share</button>
+      <button class="del" id="del">Delete my photo</button>
+    </div>
+    <div class="try"><p class="eyebrow">Coming soon</p><h2>Try more at home</h2><p class="muted" style="font-size:14px">Open the try-on on your own phone.</p></div>
+  </section>
+
+  <section class="gone"><h1>This photo is no longer available.</h1><p class="muted">It may have expired or been deleted.</p></section>
+
+  <footer class="links"><a href="terms.html">Terms</a><a href="terms.html#privacy">Privacy</a></footer>
+</main>
+<script>
+document.getElementById('del').onclick=()=>{if(confirm('Delete this photo now? This cannot be undone.'))document.body.classList.add('is-gone')};
+</script>
+</body></html>

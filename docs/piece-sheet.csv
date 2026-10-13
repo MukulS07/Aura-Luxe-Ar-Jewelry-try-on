@@ -1,0 +1,6 @@
+id,name,type,size_mm,y_offset_mm,rigid,metals_stones,weight_g,pair,story_title,story_text
+ear-001,Royal Kundan Jhumka,earrings,46,2,no,"22K gold, pearls, polki",,symmetric,Double-cut Kundan,"Handcrafted gold filigree with uncut stones and micro-pearls."
+ear-003,Chandelier Diamond Drops,earrings,42,2,no,"Rose gold, diamonds",,symmetric,,
+ear-002,Solitaire Diamond Studs,earrings,10.5,-1.5,yes,"Platinum, diamond",,symmetric,,
+neck-001,Heritage Polki Choker,necklace,124,-8,no,"Gold, polki, emerald drops",,symmetric,,
+neck-003,Imperial Rani Haar,necklace,132,12,no,"Gold, diamonds",,symmetric,,

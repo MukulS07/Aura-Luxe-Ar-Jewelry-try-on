@@ -1,0 +1,8 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "redesign", "runtimeExecutable": "npx", "runtimeArgs": ["--yes", "http-server", "redesign", "-p", "5199", "-c-1"], "port": 5199 },
+    { "name": "app", "runtimeExecutable": "npm", "runtimeArgs": ["--prefix", "ar-jewel-app", "run", "dev"], "port": 5173 },
+    { "name": "api", "runtimeExecutable": "npm", "runtimeArgs": ["--prefix", "ar-jewel-app", "run", "api"], "port": 8787 }
+  ]
+}

@@ -1,0 +1,60 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>Tracking check (dev only)</title>
+<style>
+  body { margin: 0; background: #222; }
+  #wrap { position: relative; display: inline-block; }
+  #c { display: block; transform: scaleX(-1); }
+  #gl { position: absolute; left: 0; top: 0; }
+</style>
+<div id="wrap"><canvas id="c"></canvas><canvas id="gl"></canvas></div>
+<script type="module">
+  // Dev-only page. Runs the real Tracker on a still photo (e2e/tracking.spec.ts) and, with ?draw=<catalog id>,
+  // renders that piece through Placement + Scene3D on top of the mirrored photo (e2e/alignment.spec.ts).
+  import { Tracker } from '/src/tracking/tracker.ts';
+  import { Placement, defaultFit } from '/src/render/placement.ts';
+  import { Scene3D } from '/src/render/scene.ts';
+  const q = new URLSearchParams(location.search);
+  const flip = q.has('flip');
+  // ?load=<glb url>&type=necklace: load a file through the app's own loader (meshopt, naming convention) and report
+  if (q.has('load')) {
+    window.checkResult = (async () => {
+      const { loadPiece } = await import('/src/render/piece.ts');
+      const g = await loadPiece({ id: 'x', name: 'x', type: q.get('type') || 'necklace', model: q.get('load'), material: 'yellow-gold', anchor: { offset: [0, 0, 0], scale: 1 }, active: true });
+      let meshes = 0, tris = 0;
+      g.traverse((o) => { if (o.isMesh) { meshes++; tris += (o.geometry.index ? o.geometry.index.count : o.geometry.attributes.position.count) / 3; } });
+      return { loaded: true, meshes, tris };
+    })().catch((e) => ({ error: String(e) }));
+  } else
+  window.checkResult = (async () => {
+    const img = new Image();
+    img.src = q.get('img') || '/hero.jpg';
+    await img.decode();
+    const c = document.getElementById('c');
+    c.width = img.naturalWidth;
+    c.height = img.naturalHeight;
+    const g = c.getContext('2d');
+    if (flip) {
+      g.translate(c.width, 0);
+      g.scale(-1, 1);
+    }
+    g.drawImage(img, 0, 0);
+    const t = await Tracker.create({ hands: true, segmentation: true });
+    let tr = null;
+    for (let i = 0; i < 8; i++) tr = t.detectCanvas(c, c.width, c.height, 1000 + i * 100); // let every rotating model run
+
+    const id = q.get('draw');
+    if (id && tr) {
+      const gl = document.getElementById('gl');
+      const scene = new Scene3D(gl, c.width, c.height);
+      const item = (await (await fetch('/catalog.json')).json()).find((i) => i.id === id);
+      const fit = { ...defaultFit(), scale: Number(q.get('scale') || 1), yMm: Number(q.get('y') || 0) };
+      await scene.setPiece(item);
+      const p = new Placement(c.height);
+      p.restartFade();
+      for (let i = 0; i < 60; i++) scene.apply(p.update(tr, item, 2000 + i * 33, fit));
+      scene.render();
+    }
+    return JSON.parse(JSON.stringify({ size: [c.width, c.height], tr }));
+  })().catch((e) => ({ error: String(e) }));
+</script>

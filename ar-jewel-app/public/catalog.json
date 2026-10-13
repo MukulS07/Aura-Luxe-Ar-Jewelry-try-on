@@ -1,0 +1,227 @@
+[
+  {
+    "id": "ear-001",
+    "name": "Royal Kundan Jhumka",
+    "type": "earrings",
+    "model": "procedural:jhumka",
+    "material": "yellow-gold",
+    "thumbnail": "/thumbs/ear-001.jpg",
+    "anchor": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1.25
+    },
+    "story": [
+      {
+        "title": "Double-Cut Kundan Setting",
+        "text": "Handcrafted 22K yellow gold filigree with brilliant uncut Polki stones, cabochon rubies, and cascading South Sea micro-pearls.",
+        "photo": "/thumbs/ear-001.jpg"
+      }
+    ],
+    "active": true,
+    "dimensions": {
+      "sizeMm": 46,
+      "yOffsetMm": 2
+    }
+  },
+  {
+    "id": "ear-002",
+    "name": "Solitaire Diamond Studs",
+    "type": "earrings",
+    "model": "procedural:stud",
+    "material": "silver",
+    "anchor": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "scale": 0.85
+    },
+    "story": [
+      {
+        "title": "Precision 58-Facet Cut",
+        "text": "Round brilliant solitaire diamonds secured in 6-prong platinum basket mounts for maximum refraction and fire."
+      }
+    ],
+    "active": true,
+    "dimensions": {
+      "sizeMm": 10.5,
+      "yOffsetMm": -1.5,
+      "rigid": true
+    }
+  },
+  {
+    "id": "ear-003",
+    "name": "Chandelier Diamond Drops",
+    "type": "earrings",
+    "model": "procedural:drop",
+    "material": "rose-gold",
+    "anchor": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1.05
+    },
+    "story": [
+      {
+        "title": "Articulated Silhouette",
+        "text": "18K rose gold tiers connecting brilliant-cut diamonds with dramatic pear-cut ruby drops."
+      }
+    ],
+    "active": true,
+    "dimensions": {
+      "sizeMm": 42,
+      "yOffsetMm": 2
+    }
+  },
+  {
+    "id": "ear-004",
+    "name": "Eternity Pavé Hoops",
+    "type": "earrings",
+    "model": "procedural:hoop",
+    "material": "yellow-gold",
+    "anchor": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1
+    },
+    "story": [
+      {
+        "title": "Seamless Pavé Setting",
+        "text": "Continuous row of micro-pavé diamonds embedded along mirror-polished 18K yellow gold."
+      }
+    ],
+    "active": true,
+    "dimensions": {
+      "sizeMm": 24,
+      "yOffsetMm": 0
+    }
+  },
+  {
+    "id": "neck-ruby-amulet",
+    "name": "Imperial Ruby Amulet",
+    "type": "necklace",
+    "model": "/models/ruby-amulet.glb",
+    "material": "ruby",
+    "thumbnail": "/thumbs/ruby-amulet.jpg",
+    "anchor": {
+      "offset": [
+        0,
+        0.02,
+        0
+      ],
+      "scale": 1.05
+    },
+    "story": [
+      {
+        "title": "Masterpiece Ruby Amulet",
+        "text": "Hand-chiseled 22K yellow gold amulet casing embracing a brilliant Burmese pigeon-blood ruby centerpiece with articulated royal chain.",
+        "photo": "/thumbs/ruby-amulet.jpg"
+      }
+    ],
+    "active": true,
+    "dimensions": {
+      "sizeMm": 98,
+      "yOffsetMm": 2
+    },
+    "materialRules": [
+      {
+        "match": "Part_4",
+        "material": "ruby"
+      },
+      {
+        "match": "Part_",
+        "material": "yellow-gold"
+      }
+    ]
+  },
+  {
+    "id": "neck-001",
+    "name": "Heritage Polki Choker",
+    "type": "necklace",
+    "model": "procedural:choker",
+    "material": "yellow-gold",
+    "thumbnail": "/thumbs/neck-001.jpg",
+    "anchor": {
+      "offset": [
+        0,
+        0.05,
+        0
+      ],
+      "scale": 1
+    },
+    "story": [
+      {
+        "title": "Colombian Emerald Drops",
+        "text": "Triple-tiered antique gold collar featuring uncut Polki diamond plates and pear-shaped Colombian emerald drops.",
+        "photo": "/thumbs/neck-001.jpg"
+      }
+    ],
+    "active": true,
+    "dimensions": {
+      "sizeMm": 124,
+      "yOffsetMm": -8
+    }
+  },
+  {
+    "id": "neck-002",
+    "name": "Solitaire Diamond Pendant",
+    "type": "necklace",
+    "model": "procedural:pendant",
+    "material": "silver",
+    "anchor": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1
+    },
+    "story": [
+      {
+        "title": "Floating Halo Pendant",
+        "text": "Delicate platinum link chain carrying a suspended brilliant solitaire diamond framed by a micro-pavé halo."
+      }
+    ],
+    "active": true,
+    "dimensions": {
+      "sizeMm": 112,
+      "yOffsetMm": 2
+    }
+  },
+  {
+    "id": "neck-003",
+    "name": "Imperial Rani Haar",
+    "type": "necklace",
+    "model": "procedural:haar",
+    "material": "yellow-gold",
+    "anchor": {
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "scale": 1.15
+    },
+    "story": [
+      {
+        "title": "Multi-Strand Royal Grandeur",
+        "text": "Five graduated cascades of Basra pearls converging upon a grand carved ruby and diamond royal medallion."
+      }
+    ],
+    "active": true,
+    "dimensions": {
+      "sizeMm": 132,
+      "yOffsetMm": 12
+    }
+  }
+]
