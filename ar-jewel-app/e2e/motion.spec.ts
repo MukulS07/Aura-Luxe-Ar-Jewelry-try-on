@@ -89,11 +89,13 @@ function fit(t: number[], v: number[], w: number) {
 }
 
 test('tracking follows a moving face: gain, jitter and lag', async ({ page }) => {
+  page.on('pageerror', (e) => console.log('PAGEERROR', e.message));
   await page.goto('/booth-v2.html?debug');
   await page.evaluate(() => (document.querySelector('[data-go="notice"]') as HTMLElement).click());
   await page.locator('#notice [data-go="pick"]').click();
   await page.locator('[data-pick="ear-001"]').click();
-  await page.waitForTimeout(12_000); // models load and tracking locks
+  await expect(page.locator('#shutter')).toBeEnabled({ timeout: 120_000 }); // measuring done, jewelry is being drawn
+  await page.waitForTimeout(3000);
   await page.evaluate(() => ((globalThis as { __samples?: unknown[] }).__samples!.length = 0));
   await page.waitForTimeout(8_000);
   const s = await page.evaluate(() => (globalThis as { __samples?: { t: number; rawX: number; outX: number }[] }).__samples!);

@@ -41,7 +41,8 @@ export class Tracker {
   private poses: LM[][] = [];
   private worldPoses: LM[][] = [];
   private rawHands: RawHand[] = [];
-  private mask?: CategoryMask;
+  /** Latest hair/body mask (updated every few frames), for the foreground layer. */
+  mask?: CategoryMask;
   private constructor(private m: Models) {}
 
   static async create(opts: TrackerOptions = defaults()): Promise<Tracker> {

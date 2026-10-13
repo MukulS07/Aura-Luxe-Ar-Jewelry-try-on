@@ -54,7 +54,17 @@
       p.restartFade();
       for (let i = 0; i < 60; i++) scene.apply(p.update(tr, item, 2000 + i * 33, fit));
       scene.render();
+      // Foreground layer: face and hair repainted over the jewelry (?nofg=1 turns it off for comparison)
+      const { Foreground } = await import('/src/render/foreground.ts');
+      const { farSide } = await import('/src/render/masking.ts');
+      const fg = new Foreground(c.width, c.height);
+      document.getElementById('wrap').appendChild(fg.canvas);
+      const zone = item.type === 'earrings'
+        ? { kind: 'earrings', lobes: [tr.ears.lobeL, tr.ears.lobeR], far: farSide(tr.yaw), faceCx: tr.center.x, ppm: tr.pxPerMm }
+        : { kind: 'necklace' };
+      if (!q.has('nofg')) fg.render(c, c.width, c.height, t.mask, zone);
+      window.fgCovered = fg.covered;
     }
-    return JSON.parse(JSON.stringify({ size: [c.width, c.height], tr }));
+    return JSON.parse(JSON.stringify({ size: [c.width, c.height], tr, fgCovered: window.fgCovered ?? 0 }));
   })().catch((e) => ({ error: String(e) }));
 </script>

@@ -3,6 +3,7 @@ import type { View } from './solve';
 
 /** selfie_multiclass_256x256 categories: 0 background, 1 hair, 2 body skin, 3 face skin, 4 clothes, 5 other. */
 export const CAT_HAIR = 1;
+export const CAT_FACE = 3;
 /** Hair share around a lobe above which the earring is treated as hidden by hair (FR-6). TODO(confirm): tune on real hairstyles. */
 export const HAIR_COVER_THRESHOLD = 0.5;
 

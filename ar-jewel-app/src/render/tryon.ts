@@ -2,6 +2,8 @@ import type { CatalogItem, Tracking } from '../types';
 import { Measurer, type MeasureState } from '../tracking/measurer';
 import { Tracker } from '../tracking/tracker';
 import { clampFit, defaultFit, Placement, type Fit, type Frame } from './placement';
+import { Foreground, drawCover } from './foreground';
+import { farSide, type Zone } from './masking';
 import { Scene3D } from './scene';
 
 export type Hint = 'none' | 'noface' | 'multi' | 'dark';
@@ -44,6 +46,8 @@ export class TryOn {
   measure: MeasureState = { phase: 'measuring', face: false, ears: false, neck: false, progress: 0, hint: 'noface' };
   private item?: CatalogItem;
   private scene: Scene3D;
+  private fg: Foreground;
+  private tracker?: Tracker;
   private placement: Placement;
   private stream?: MediaStream;
   private raf = 0;
@@ -71,6 +75,8 @@ export class TryOn {
     host.prepend(this.canvas);
     host.prepend(this.video);
     this.scene = new Scene3D(this.canvas, W, H);
+    this.fg = new Foreground(W, H);
+    this.canvas.after(this.fg.canvas); // above the jewelry, below the screen's own controls
     this.placement = new Placement(H);
   }
 
@@ -89,7 +95,7 @@ export class TryOn {
 
   async start(): Promise<void> {
     if (this.running) return;
-    const tracker = await preloadTracker();
+    const tracker = (this.tracker = await preloadTracker());
     this.stream = await navigator.mediaDevices.getUserMedia({
       // Ask for a frame shaped like the screen (a phone held upright wants a portrait frame)
       video:
@@ -119,6 +125,7 @@ export class TryOn {
       this.lastFrame = this.placement.update(tr, m.phase === 'ready' ? this.item : undefined, now, this._fit, this.detectMs);
       this.scene.apply(this.lastFrame);
       this.scene.render();
+      this.maskForeground(tr);
       this.onFrame?.(tr, now);
       this.updateHint(tr ? tr.faceCount : 0, now);
       this.frames++;
@@ -130,6 +137,18 @@ export class TryOn {
       this.raf = requestAnimationFrame(loop);
     };
     this.raf = requestAnimationFrame(loop);
+  }
+
+  /** Put the face and hair in front of the jewelry where they belong. Needs the segmentation mask (not on phones). */
+  private maskForeground(tr: Tracking | null) {
+    const f = this.lastFrame;
+    let zone: Zone | undefined;
+    if (tr && f && f.opacity > 0.05 && this.item)
+      zone =
+        this.item.type === 'earrings'
+          ? { kind: 'earrings', lobes: [tr.ears.lobeL, tr.ears.lobeR], far: farSide(tr.yaw), faceCx: tr.center.x, ppm: tr.pxPerMm }
+          : { kind: 'necklace' };
+    this.fg.render(this.video, this.video.videoWidth, this.video.videoHeight, this.tracker?.mask, zone);
   }
 
   private updateHint(faces: number, now: number) {
@@ -156,16 +175,9 @@ export class TryOn {
     c.width = this.W;
     c.height = this.H;
     const g = c.getContext('2d')!;
-    const vw = this.video.videoWidth,
-      vh = this.video.videoHeight;
-    const s = Math.max(this.W / vw, this.H / vh),
-      dw = vw * s,
-      dh = vh * s;
-    g.translate(this.W, 0);
-    g.scale(-1, 1);
-    g.drawImage(this.video, (this.W - dw) / 2, (this.H - dh) / 2, dw, dh);
-    g.setTransform(1, 0, 0, 1, 0, 0);
+    drawCover(g, this.video, this.video.videoWidth, this.video.videoHeight, this.W, this.H);
     g.drawImage(this.canvas, 0, 0, this.W, this.H);
+    g.drawImage(this.fg.canvas, 0, 0, this.W, this.H); // hair and face stay in front of the jewelry in the photo too
     return new Promise((ok, fail) => c.toBlob((b) => (b ? ok(b) : fail(new Error('capture failed'))), 'image/jpeg', 0.9));
   }
 
@@ -173,6 +185,7 @@ export class TryOn {
     this.running = false;
     this.measurer.reset(); // the next visit is measured from scratch
     this.measureKey = '';
+    this.fg.clear();
     cancelAnimationFrame(this.raf);
     this.stream?.getTracks().forEach((t) => t.stop());
     this.stream = undefined;
@@ -185,5 +198,6 @@ export class TryOn {
     this.scene.dispose();
     this.video.remove();
     this.canvas.remove();
+    this.fg.dispose();
   }
 }
