@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+  <meta name="robots" content="noindex">
+  <title>ANVAYA — Virtual Jewellery Try-On</title>
+  <link rel="icon" type="image/svg+xml" href="/brand/anvaya-mark.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/ui/booth.css">
+</head>
+<body>
+<div id="stage">
+
+<!-- 4.1 Start Screen -->
+<section class="screen on" id="start">
+  <div class="hero">
+    <div class="hero-overlay"></div>
+    <div class="wordmark-wrap">
+      <img class="anvaya-mark" src="/brand/anvaya-mark.svg" alt="" aria-hidden="true">
+      <img class="anvaya-wordmark" src="/brand/anvaya-wordmark.svg" alt="ANVAYA">
+      <p class="anvaya-tagline"><span>Heritage Meets Reality</span></p>
+    </div>
+  </div>
+  <div class="start-body">
+    <h1 class="display" data-i="start.title">See jewelry on you</h1>
+    <p class="body muted" data-i="start.sub">Experience fine earrings and necklaces in real-time augmented reality</p>
+    <button class="btn btn-primary pulse" data-act="begin">
+      <span class="btn-sparkle">✦</span>
+      <span data-i="start.cta">Touch to start</span>
+      <span class="btn-sparkle">✦</span>
+    </button>
+    <div class="lang">
+      <button class="btn btn-text" data-lang="en">EN</button>
+      <span class="lang-divider">|</span>
+      <button class="btn btn-text" data-lang="hi">हिन्दी</button>
+    </div>
+  </div>
+</section>
+
+<!-- 4.2 Privacy Notice -->
+<section class="screen" id="notice">
+  <div class="notice">
+    <div class="notice-badge">
+      <svg class="ico" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    </div>
+    <h1 class="title" data-i="notice.title">Private Virtual Try-On</h1>
+    <p class="body" id="noticeBody"></p>
+    <div class="notice-qr-row">
+      <div class="qr-sm"><canvas id="termsQr" width="144" height="144"></canvas></div>
+      <p class="caption muted" data-i="notice.terms"></p>
+    </div>
+    <div class="row">
+      <button class="btn btn-secondary" data-act="decline" data-i="notice.decline">No thanks</button>
+      <button class="btn btn-primary" data-act="accept" data-i="notice.accept">Accept & Begin</button>
+    </div>
+  </div>
+</section>
+
+<!-- 4.3 Catalog Pick Screen -->
+<section class="screen" id="pick">
+  <div class="top">
+    <button class="btn btn-text" data-act="home" data-i="pick.home">← Atelier Home</button>
+  </div>
+  <h1 class="title" data-i="pick.title">Select Your Jewel</h1>
+  <div class="cats">
+    <button class="cat sel" data-cat="earrings">
+      <div class="cat-bg cat-earrings"></div>
+      <span class="cat-label" data-i="cat.earrings">Earrings</span>
+    </button>
+    <button class="cat" data-cat="necklace">
+      <div class="cat-bg cat-necklace"></div>
+      <span class="cat-label" data-i="cat.necklace">Necklaces</span>
+    </button>
+  </div>
+  <div class="sec" id="secName">Earrings Collection</div>
+  <div class="grid" id="grid"></div>
+  <p class="body muted hint-bot" data-i="pick.hint">Tap any creation to commence live mirror try-on</p>
+</section>
+
+<!-- 4.4 Live Try-On Screen -->
+<section class="screen" id="live" style="padding:0">
+  <div class="bar">
+    <button class="btn btn-icon" data-act="toPick" aria-label="Back">←</button>
+    <div class="name-container">
+      <span class="collection-tag">HAUTE PIECE</span>
+      <div class="name" id="liveName">Royal Kundan Jhumka</div>
+    </div>
+    <button class="btn btn-pill" id="detailsBtn" data-act="details" data-i="live.details" hidden>Craft Story</button>
+    <button class="btn btn-icon" data-act="home" aria-label="Home">⌂</button>
+  </div>
+  <div class="chip" id="chip">Calibrating AR optics…</div>
+  <div class="face" id="face"></div>
+  <div class="face-t" id="faceT" data-i="live.guide">Align face in mirror guide</div>
+
+  <div class="dock">
+    <div class="tabs">
+      <button class="tab sel" data-cat2="earrings" data-i="cat.earrings">Earrings</button>
+      <button class="tab" data-cat2="necklace" data-i="cat.necklace">Necklaces</button>
+    </div>
+    <div class="car">
+      <button class="arr btn" data-scroll="-1" aria-label="Previous">◀</button>
+      <div class="strip" id="strip"></div>
+      <button class="arr btn" data-scroll="1" aria-label="Next">▶</button>
+    </div>
+    <div class="shutter-row">
+      <button class="shutter" id="shutter" data-act="shoot" aria-label="Take photo">
+        <div class="shutter-inner"></div>
+      </button>
+    </div>
+    <p class="small" style="color:var(--cam-text);opacity:.85" data-i="result.disclaimer">Simulation is approximate. Real gems and metals may differ in physical fit.</p>
+  </div>
+  <div class="count" id="count"></div>
+  <div class="flash" id="flash"></div>
+</section>
+
+<!-- 4.5 Photo Preview Screen -->
+<section class="screen" id="photo">
+  <div class="photo">
+    <img id="photoImg" alt="Your luxury try-on portrait">
+    <img class="photo-brand anvaya-wordmark" src="/brand/anvaya-wordmark.svg" alt="ANVAYA">
+  </div>
+  <h2 class="title center" data-i="photo.question">Save your portrait?</h2>
+  <p class="caption muted center" id="photoExpiry" style="margin:16px 0 32px">Temporary link · Automatically removed in 24 hours</p>
+  <div class="row">
+    <button class="btn btn-secondary" data-act="retake" data-i="photo.retake">Retake</button>
+    <button class="btn btn-primary" id="saveBtn" data-act="save" data-i="photo.save">Save & Share</button>
+  </div>
+  <button class="btn btn-text" data-act="discard" data-i="photo.discard">Discard portrait</button>
+</section>
+
+<!-- 4.6 QR Screen -->
+<section class="screen" id="qr">
+  <div class="qr-header">
+    <div class="wordmark-sub">PORTRAIT READY</div>
+    <h1 class="title center" data-i="qr.title">Scan to Take Home</h1>
+  </div>
+  <div class="qr-wrapper">
+    <div class="qr"><canvas id="qrCanvas" width="480" height="480"></canvas></div>
+  </div>
+  <p class="body center muted" id="qrHelp" style="margin-top:36px">Scan with your smartphone camera to download your photo.</p>
+  <button class="btn btn-primary" style="margin-top:auto" data-act="done" data-i="qr.done">Done & Return</button>
+  <p class="small" id="qrAuto"></p>
+</section>
+
+<!-- Modals & Sheets -->
+<div class="sheet-bg" id="detailsSheet">
+  <div class="sheet">
+    <p class="eyebrow" id="dEyebrow">Royal Kundan Jhumka</p>
+    <h2 class="title" id="dTitle"></h2>
+    <div class="callout-photo" id="dPhoto" hidden></div>
+    <p class="body" id="dText"></p>
+    <div class="dots" id="dDots"></div>
+    <div class="row">
+      <button class="btn btn-secondary" data-act="closeSheet" data-i="details.back">Back</button>
+      <button class="btn btn-secondary" id="dNext" data-act="dNext" data-i="details.next">Next Detail</button>
+      <button class="btn btn-primary" data-act="closeSheet" data-i="details.tryon">Try On</button>
+    </div>
+  </div>
+</div>
+
+<div class="sheet-bg" id="idleSheet">
+  <div class="sheet center">
+    <div class="notice-badge">⏳</div>
+    <h1 class="title" data-i="idle.title">Still exploring?</h1>
+    <p class="body muted" id="idleBody"></p>
+    <button class="btn btn-primary" data-act="idleContinue" data-i="idle.continue">I'm here</button>
+  </div>
+</div>
+
+<div class="sheet-bg" id="errSheet">
+  <div class="sheet center">
+    <div class="notice-badge">⚠️</div>
+    <p class="body" id="errMsg"></p>
+    <div class="row" id="errBtns"></div>
+  </div>
+</div>
+
+</div>
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

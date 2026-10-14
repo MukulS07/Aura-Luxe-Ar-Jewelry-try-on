@@ -2,7 +2,7 @@
 const CACHE = 'booth-v1';
 const STATIC = ['/mediapipe/', '/assets/', '/uploads/'];
 
-self.addEventListener('install', (e) => { self.skipWaiting(); e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['/', '/catalog.json']).catch(() => {}))); });
+self.addEventListener('install', (e) => { self.skipWaiting(); e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['/booth.html', '/catalog.json']).catch(() => {}))); });
 self.addEventListener('activate', (e) => e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())));
 
 self.addEventListener('fetch', (e) => {
