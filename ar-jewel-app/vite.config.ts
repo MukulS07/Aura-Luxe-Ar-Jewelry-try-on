@@ -12,6 +12,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
+        site: resolve(__dirname, 'site.html'), // public ANVAYA site
         share: resolve(__dirname, 'share.html'),
         admin: resolve(__dirname, 'admin.html'),
         terms: resolve(__dirname, 'terms.html'),

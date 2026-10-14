@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ANVAYA — Heritage Meets Reality</title>
+<meta name="description" content="Immersive AR and VR experiences for timeless Indian jewellery.">
+<link rel="icon" type="image/svg+xml" href="/brand/anvaya-mark.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/src/ui/site.css">
+</head>
+<body>
+
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <clipPath id="archClip" clipPathUnits="objectBoundingBox">
+      <path d="M0,1 L0,0.47 C0,0.235 0.195,0.082 0.5,0 C0.805,0.082 1,0.235 1,0.47 L1,1 Z"/>
+    </clipPath>
+    <linearGradient id="archFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1F4639"/><stop offset="1" stop-color="#071512"/>
+    </linearGradient>
+    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#D6B36A" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#EFD9A8" stop-opacity=".5"/>
+      <stop offset="1" stop-color="#D6B36A" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="pendantGlow" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#D6B36A" stop-opacity=".3"/>
+      <stop offset="1" stop-color="#D6B36A" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="jaliPat" width="48" height="48" patternUnits="userSpaceOnUse">
+      <g fill="none" stroke="#D6B36A" stroke-width="1.1">
+        <path d="M24 2 L46 24 L24 46 L2 24 Z"/>
+        <circle cx="24" cy="24" r="6.5"/>
+        <path d="M0 0 L8 8 M48 0 L40 8 M0 48 L8 40 M48 48 L40 40"/>
+      </g>
+    </pattern>
+
+
+    <!-- a single teardrop, reused along the haar -->
+    <g id="drop"><path d="M0,-17 C5.6,-8 8,-3 8,3 C8,10 4.4,14 0,14 C-4.4,14 -8,10 -8,3 C-8,-3 -5.6,-8 0,-17 Z"/></g>
+    <g id="dia"><path d="M0,-8 L5.5,0 L0,8 L-5.5,0 Z"/></g>
+
+    <!-- one jhumka, origin at the lobe -->
+    <g id="jhumka">
+      <circle cx="0" cy="-92" r="7"/>
+      <path d="M0,-85 L0,-70"/>
+      <path d="M-27,-40 A27 27 0 0 1 27,-40"/>
+      <path d="M-27,-40 L27,-40"/>
+      <path d="M-27,-40 L-36,-2 Q0,22 36,-2 L27,-40"/>
+      <path d="M-30,10 L-30,24 M-19,18 L-19,33 M-7,22 L-7,38 M7,22 L7,38 M19,18 L19,33 M30,10 L30,24" opacity=".6"/>
+      <g fill="currentColor" stroke="none">
+        <circle cx="-30" cy="4" r="2.8"/><circle cx="-19" cy="12" r="2.8"/>
+        <circle cx="-7" cy="16" r="2.8"/><circle cx="7" cy="16" r="2.8"/>
+        <circle cx="19" cy="12" r="2.8"/><circle cx="30" cy="4" r="2.8"/>
+        <use href="#dia" transform="translate(0,-57) scale(.55)"/>
+      </g>
+    </g>
+
+    <!-- line-art pieces -->
+    <symbol id="jwl-necklace" viewBox="0 0 320 300">
+      <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M40,66 Q160,276 280,66"/>
+        <path d="M63,80 Q160,236 257,80" opacity=".55"/>
+        <circle cx="40" cy="66" r="4.5" fill="currentColor" stroke="none"/>
+        <circle cx="280" cy="66" r="4.5" fill="currentColor" stroke="none"/>
+        <path d="M40,66 L32,52 M280,66 L288,52"/>
+        <g fill="currentColor" stroke="none">
+          <circle cx="76" cy="120" r="2.6"/><circle cx="112" cy="155" r="2.6"/>
+          <circle cx="148" cy="171" r="2.6"/><circle cx="172" cy="171" r="2.6"/>
+          <circle cx="208" cy="155" r="2.6"/><circle cx="244" cy="120" r="2.6"/>
+        </g>
+        <g stroke-width="1.4">
+          <use href="#drop" transform="translate(112,166) scale(.62)"/>
+          <use href="#drop" transform="translate(208,166) scale(.62)"/>
+          <use href="#drop" transform="translate(148,185) scale(.8)"/>
+          <use href="#drop" transform="translate(172,185) scale(.8)"/>
+        </g>
+        <g fill="currentColor" stroke="none" opacity=".9">
+          <use href="#dia" transform="translate(112,168) scale(.34)"/>
+          <use href="#dia" transform="translate(208,168) scale(.34)"/>
+          <use href="#dia" transform="translate(148,188) scale(.42)"/>
+          <use href="#dia" transform="translate(172,188) scale(.42)"/>
+        </g>
+        <path d="M160,172 L160,186" />
+      </g>
+      <image href="/brand/anvaya-mark.svg" x="129" y="186" width="62" height="69"/>
+    </symbol>
+
+    <symbol id="jwl-earrings" viewBox="0 0 320 300">
+      <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <use href="#jhumka" transform="translate(103,196)"/>
+        <use href="#jhumka" transform="translate(217,196)"/>
+      </g>
+    </symbol>
+
+    <symbol id="jwl-ring" viewBox="0 0 320 300">
+      <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="160" cy="190" rx="64" ry="74"/>
+        <ellipse cx="160" cy="193" rx="51" ry="60" opacity=".5"/>
+        <path d="M118,124 L142,96 M202,124 L178,96"/>
+        <path d="M160,60 L188,96 L160,132 L132,96 Z"/>
+        <path d="M132,96 L160,110 L188,96 M160,110 L160,132" opacity=".6"/>
+        <g fill="currentColor" stroke="none">
+          <use href="#dia" transform="translate(112,124) scale(.5)"/>
+          <use href="#dia" transform="translate(208,124) scale(.5)"/>
+        </g>
+        <path d="M160,44 L160,54 M136,52 L142,62 M184,52 L178,62" opacity=".55"/>
+      </g>
+    </symbol>
+
+    <symbol id="jwl-bangle" viewBox="0 0 320 300">
+      <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="160" cy="150" r="98"/>
+        <circle cx="160" cy="150" r="70"/>
+        <circle cx="160" cy="150" r="84" opacity=".3"/>
+        <circle cx="160" cy="150" r="78" opacity=".22"/>
+        <g fill="currentColor" stroke="none">
+          <g transform="translate(160,150)">
+            <use href="#dia" transform="rotate(0) translate(0,-84) scale(.95)"/>
+            <use href="#dia" transform="rotate(30) translate(0,-84) scale(.95)"/>
+            <use href="#dia" transform="rotate(60) translate(0,-84) scale(.95)"/>
+            <use href="#dia" transform="rotate(90) translate(0,-84) scale(.95)"/>
+            <use href="#dia" transform="rotate(120) translate(0,-84) scale(.95)"/>
+            <use href="#dia" transform="rotate(150) translate(0,-84) scale(.95)"/>
+            <use href="#dia" transform="rotate(180) translate(0,-84) scale(.95)"/>
+            <use href="#dia" transform="rotate(210) translate(0,-84) scale(.95)"/>
+            <use href="#dia" transform="rotate(240) translate(0,-84) scale(.95)"/>
+            <use href="#dia" transform="rotate(270) translate(0,-84) scale(.95)"/>
+            <use href="#dia" transform="rotate(300) translate(0,-84) scale(.95)"/>
+            <use href="#dia" transform="rotate(330) translate(0,-84) scale(.95)"/>
+          </g>
+          <g opacity=".7">
+            <circle cx="160" cy="88" r="2.2"/><circle cx="196" cy="98" r="2.2"/><circle cx="222" cy="124" r="2.2"/>
+            <circle cx="232" cy="150" r="2.2"/><circle cx="222" cy="176" r="2.2"/><circle cx="196" cy="202" r="2.2"/>
+            <circle cx="160" cy="212" r="2.2"/><circle cx="124" cy="202" r="2.2"/><circle cx="98" cy="176" r="2.2"/>
+            <circle cx="88" cy="150" r="2.2"/><circle cx="98" cy="124" r="2.2"/><circle cx="124" cy="98" r="2.2"/>
+          </g>
+        </g>
+      </g>
+    </symbol>
+
+    <symbol id="jwl-set" viewBox="0 0 320 300">
+      <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M86,52 Q160,196 234,52"/>
+        <path d="M103,62 Q160,172 217,62" opacity=".5"/>
+        <circle cx="86" cy="52" r="3.6" fill="currentColor" stroke="none"/>
+        <circle cx="234" cy="52" r="3.6" fill="currentColor" stroke="none"/>
+        <g stroke-width="1.3">
+          <use href="#drop" transform="translate(126,128) scale(.5)"/>
+          <use href="#drop" transform="translate(194,128) scale(.5)"/>
+        </g>
+        <use href="#jhumka" transform="translate(48,242) scale(.62)"/>
+        <use href="#jhumka" transform="translate(272,242) scale(.62)"/>
+      </g>
+      <image href="/brand/anvaya-mark.svg" x="136" y="130" width="48" height="54"/>
+    </symbol>
+
+    <!-- small UI icons -->
+    <symbol id="i-necklace" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M6,7 Q16,27 26,7"/><circle cx="16" cy="23" r="3.4"/></g></symbol>
+    <symbol id="i-earrings" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="10" cy="7" r="2.6"/><path d="M10,9.6 L10,13 M4.5,20 A5.5 5.5 0 0 1 15.5,20 Z"/><circle cx="23" cy="10" r="2.6"/><path d="M23,12.6 L23,16 M17.5,23 A5.5 5.5 0 0 1 28.5,23 Z"/></g></symbol>
+    <symbol id="i-ring" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="16" cy="20" r="8.4"/><path d="M16,4 L20.5,9.5 L16,15 L11.5,9.5 Z"/></g></symbol>
+    <symbol id="i-bangle" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="16" cy="16" r="11"/><circle cx="16" cy="16" r="6.4" opacity=".6"/></g></symbol>
+    <symbol id="i-set" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M7,6 Q16,22 25,6"/><circle cx="16" cy="18" r="2.4"/><path d="M6,24 A4 4 0 0 1 14,24 Z M18,24 A4 4 0 0 1 26,24 Z"/></g></symbol>
+
+    <symbol id="t-3d" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M24,6 L40,15 L40,33 L24,42 L8,33 L8,15 Z"/><path d="M8,15 L24,24 L40,15 M24,24 L24,42" opacity=".65"/><path d="M24,6 L24,24" opacity=".3"/></g></symbol>
+    <symbol id="t-ar" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M6,16 L6,9 A3 3 0 0 1 9,6 L16,6 M32,6 L39,6 A3 3 0 0 1 42,9 L42,16 M42,32 L42,39 A3 3 0 0 1 39,42 L32,42 M16,42 L9,42 A3 3 0 0 1 6,39 L6,32"/></g><image href="/brand/anvaya-mark.svg" x="17" y="14" width="18" height="20"/></symbol>
+    <symbol id="t-vr" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M9,17 L39,17 A5 5 0 0 1 44,22 L44,29 A5 5 0 0 1 39,34 L30,34 L24,29 L18,34 L9,34 A5 5 0 0 1 4,29 L4,22 A5 5 0 0 1 9,17 Z"/><circle cx="15" cy="25" r="4" opacity=".7"/><circle cx="33" cy="25" r="4" opacity=".7"/><path d="M14,17 L16,11 L32,11 L34,17" opacity=".5"/></g></symbol>
+    <symbol id="t-story" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M24,10 C33,18 33,30 24,38 C15,30 15,18 24,10 Z"/><path d="M10,24 C18,18 30,18 38,24 C30,30 18,30 10,24 Z" opacity=".55"/><circle cx="24" cy="24" r="3" fill="currentColor" stroke="none"/></g></symbol>
+  </defs>
+</svg>
+
+<header class="site-head">
+  <div class="wrap head-row">
+    <a class="brand-link" href="#home" aria-label="ANVAYA — home">
+      <img class="anvaya-mark" src="/brand/anvaya-mark.svg" alt="" aria-hidden="true">
+      <img class="anvaya-wordmark" src="/brand/anvaya-wordmark.svg" alt="ANVAYA">
+    </a>
+    <nav class="nav" id="nav">
+      <a href="#home">Home</a>
+      <a href="#experience">Experience</a>
+      <a href="#collections">Collections</a>
+      <a href="#vision">About</a>
+    </nav>
+    <a class="btn btn--gold head-cta" href="/index.html">Try the booth</a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileNav">Menu</button>
+  </div>
+  <div class="wrap mobile-nav" id="mobileNav" hidden>
+    <a href="#home">Home</a>
+    <a href="#experience">Experience</a>
+    <a href="#collections">Collections</a>
+    <a href="#vision">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+</header>
+
+<main>
+  <!-- ============ HERO ============ -->
+  <section class="hero band" id="home">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow fade-up d1">Indian Heritage · Immersive Reality</p>
+        <h1 class="fade-up d2">Heritage Meets<br><span class="gilt">Reality</span></h1>
+        <p class="lede fade-up d3">Immersive AR &amp; VR experiences for timeless jewellery — so a bride in Jaipur and a buyer in London can wear the same haar before it leaves the karigar's bench.</p>
+        <div class="hero-actions fade-up d4">
+          <a class="btn btn--gold btn--lg" href="/index.html">Try the booth <span aria-hidden="true">→</span></a>
+          <a class="btn btn--ghost btn--lg" href="#collections">View Collections</a>
+        </div>
+        <p class="craft-line fade-up d5"><b>Kundan</b> · <b>Polki</b> · <b>Temple Gold</b> · <b>Meenakari</b> · <b>Jadau</b></p>
+      </div>
+
+      <div class="hero-art fade-up d3">
+        <svg viewBox="0 0 520 660" role="img" aria-label="A rani haar rendered as gold line art inside a Mughal arch">
+          <defs>
+            <clipPath id="heroArchClip"><path d="M46 646 L46 264 C46 158 152 76 260 24 C368 76 474 158 474 264 L474 646 Z"/></clipPath>
+          </defs>
+          <path d="M46 646 L46 264 C46 158 152 76 260 24 C368 76 474 158 474 264 L474 646 Z" fill="url(#archFill)"/>
+          <g clip-path="url(#heroArchClip)">
+            <rect x="0" y="0" width="520" height="660" fill="url(#jaliPat)" opacity=".085"/>
+            <rect class="shimmer" x="-240" y="-120" width="150" height="900" fill="url(#sheen)" opacity="0"/>
+            <circle cx="260" cy="398" r="142" fill="url(#pendantGlow)"/>
+          </g>
+          <path d="M46 646 L46 264 C46 158 152 76 260 24 C368 76 474 158 474 264 L474 646 Z" fill="none" stroke="#D6B36A" stroke-width="1.3" opacity=".7"/>
+          <path d="M68 646 L68 272 C68 174 160 100 260 52 C360 100 452 174 452 272 L452 646 Z" fill="none" stroke="#D6B36A" stroke-width=".8" opacity=".26"/>
+          <g transform="translate(76,157) scale(1.15)" color="#D6B36A">
+            <use href="#jwl-necklace" width="320" height="300" x="0" y="0"/>
+          </g>
+          <g fill="none" stroke="#D6B36A" opacity=".5" stroke-width="1">
+            <path d="M148 556 L372 556"/>
+          </g>
+          <g fill="#D6B36A" opacity=".75"><use href="#dia" transform="translate(260,556) scale(.62)"/></g>
+          <text x="260" y="598" text-anchor="middle" fill="#D6B36A" opacity=".85"
+                style="font-family:Manrope,sans-serif;font-size:13px;letter-spacing:5px;font-weight:400">RANI HAAR · AR READY</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CREED ============ -->
+  <div class="band band--deep pad-sm" style="border-block:1px solid var(--line-soft)">
+    <div class="wrap creed">
+      <span>See it.</span><i></i><span>Try it.</span><i></i><span>Feel it.</span><i></i><span class="gilt" style="font-style:normal;color:var(--gold)">Virtually.</span>
+    </div>
+  </div>
+
+  <!-- ============ VISION ============ -->
+  <section class="band band--green pad" id="vision">
+    <div class="wrap vision-grid">
+      <div>
+        <p class="eyebrow">The Vision</p>
+        <h2 class="pull">Indian craftsmanship,<br>reimagined for a<br><span class="gilt">digital world.</span></h2>
+        <ol class="chapters">
+          <li><span class="num">01</span><span><span class="ttl">The Vision</span><span class="sub">Bridging heritage and technology</span></span></li>
+          <li><span class="num">02</span><span><span class="ttl">The Experience</span><span class="sub">AR &amp; VR built for jewellery</span></span></li>
+          <li><span class="num">03</span><span><span class="ttl">Our Offering</span><span class="sub">Immersive retail solutions</span></span></li>
+          <li><span class="num">04</span><span><span class="ttl">The Future</span><span class="sub">A new era of jewellery experiences</span></span></li>
+        </ol>
+      </div>
+      <div class="vision-body">
+        <p>Anvaya means the thread that connects — the link between one thing and the next. It is the right word for what we do: we carry four centuries of Indian goldsmithing into a medium that did not exist when those techniques were invented.</p>
+        <p>A kundan setting is judged by how uncut stones catch a moving light. A jhumka is judged by how its fringe swings. Neither survives a flat product photograph, which is why jewellery has stayed stubbornly offline while everything else moved.</p>
+        <p>We scan each piece at micron detail, rebuild its gold, its enamel and its stones as physically accurate materials, and place it back on a real person — on their own screen, in their own light. The karigar's work is unchanged. Only the distance between the bench and the buyer has closed.</p>
+        <p>We build this for houses that already have the craft: heritage jewellers, bridal ateliers, and the retail floors that carry them.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TECHNOLOGY ============ -->
+  <section class="band band--deep pad" id="technology">
+    <div class="wrap">
+      <p class="eyebrow">Our Technology</p>
+      <h2>The Art of Jewellery, <span class="gilt">Reimagined.</span></h2>
+      <div class="tech-grid">
+        <article class="tech">
+          <svg class="tech-ico" viewBox="0 0 48 48" aria-hidden="true"><use href="#t-3d"/></svg>
+          <h3>3D Visualisation</h3>
+          <p>Each piece photogrammetry-scanned and rebuilt with measured gold, enamel and stone response, so a polki reads as polki from every angle.</p>
+        </article>
+        <article class="tech">
+          <svg class="tech-ico" viewBox="0 0 48 48" aria-hidden="true"><use href="#t-ar"/></svg>
+          <h3>AR Try-On</h3>
+          <p>Neck, ear, hand and wrist tracking tuned for jewellery — drape, weight and shadow behave the way the real piece would.</p>
+        </article>
+        <article class="tech">
+          <svg class="tech-ico" viewBox="0 0 48 48" aria-hidden="true"><use href="#t-vr"/></svg>
+          <h3>VR Showroom</h3>
+          <p>A walkable atelier where collections sit under jewellers' lighting, shared live with a client who is three time zones away.</p>
+        </article>
+        <article class="tech">
+          <svg class="tech-ico" viewBox="0 0 48 48" aria-hidden="true"><use href="#t-story"/></svg>
+          <h3>Immersive Storytelling</h3>
+          <p>The provenance of a design — region, technique, the hands that made it — told alongside the piece instead of on a tag.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EXPERIENCE ============ -->
+  <section class="band band--green pad" id="experience">
+    <div class="wrap">
+      <p class="eyebrow">The Experience</p>
+      <h2>Experience Jewellery <span class="gilt">Differently.</span></h2>
+      <p class="lede">A working view of the Anvaya try-on interface. Choose a category to see how a piece is presented to your client.</p>
+
+      <div class="stage">
+        <div class="stage-rail" role="group" aria-label="Jewellery category">
+          <button class="rail-btn" type="button" data-piece="necklace" aria-pressed="true"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-necklace"/></svg>Necklace</button>
+          <button class="rail-btn" type="button" data-piece="earrings" aria-pressed="false"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-earrings"/></svg>Earrings</button>
+          <button class="rail-btn" type="button" data-piece="ring" aria-pressed="false"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-ring"/></svg>Rings</button>
+          <button class="rail-btn" type="button" data-piece="bangle" aria-pressed="false"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-bangle"/></svg>Bangles</button>
+          <button class="rail-btn" type="button" data-piece="set" aria-pressed="false"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-set"/></svg>Sets</button>
+        </div>
+
+        <div class="stage-view">
+          <div class="stage-top">
+            <div class="mode" role="group" aria-label="Viewing mode">
+              <button type="button" data-mode="AR" aria-pressed="true">AR</button>
+              <button type="button" data-mode="VR" aria-pressed="false">VR</button>
+            </div>
+            <span class="live"><i></i><span id="modeLabel">AR Try-On</span></span>
+          </div>
+          <div class="stage-piece" id="stagePiece">
+            <svg viewBox="0 0 320 300" role="img" aria-label="Selected piece" id="pieceSvg"><use href="#jwl-necklace" id="pieceUse"/></svg>
+          </div>
+        </div>
+
+        <aside class="stage-detail">
+          <span class="caps">Product Details</span>
+          <h3 id="pName">Rani Haar</h3>
+          <p id="pDesc" style="margin:0;font-size:.875rem;color:var(--fg-dim);line-height:1.6">Seven-strand bridal haar with uncut polki centrepiece and carved emerald drops.</p>
+          <ul class="spec">
+            <li><span>Craft</span><b id="pCraft">Kundan Polki</b></li>
+            <li><span>Metal</span><b id="pMetal">22k yellow gold</b></li>
+            <li><span>Stones</span><b id="pStones">Uncut diamond, emerald</b></li>
+            <li><span>Fit</span><b id="pFit">Neck tracking</b></li>
+          </ul>
+          <div>
+            <span class="caps" style="font-size:.6rem;color:var(--fg-dim);display:block;margin-bottom:.55rem">Finish</span>
+            <div class="finishes" role="group" aria-label="Finish">
+              <span class="fin" data-on="true" title="Yellow gold" style="background:linear-gradient(140deg,#EFD9A8,#B9924A)"></span>
+              <span class="fin" title="Rose gold" style="background:linear-gradient(140deg,#F2CDB9,#C07E5F)"></span>
+              <span class="fin" title="Antique gold" style="background:linear-gradient(140deg,#C9AC6C,#7A6026)"></span>
+            </div>
+          </div>
+          <a class="btn btn--gold" href="/index.html">Try On</a>
+          <a class="btn btn--ghost" href="/index.html">View in 3D</a>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ COLLECTIONS ============ -->
+  <section class="band band--deep pad" id="collections">
+    <div class="wrap">
+      <p class="eyebrow">Collections</p>
+      <h2>Tradition, <span class="gilt">Reimagined.</span></h2>
+      <div class="coll-grid">
+        <article class="coll">
+          <div class="arch">
+            <span class="arch-bg"></span><span class="arch-jali"></span>
+            <svg class="arch-line" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true"><path d="M0,1 L0,0.47 C0,0.235 0.195,0.082 0.5,0 C0.805,0.082 1,0.235 1,0.47 L1,1 Z"/></svg>
+            <svg class="piece" viewBox="0 0 320 300" role="img" aria-label="Kundan and polki necklace"><use href="#jwl-necklace"/></svg>
+          </div>
+          <h3>Kundan &amp; Polki</h3>
+          <p>Uncut diamonds set in foiled gold. Scanned strand by strand so the light scatter survives the screen.</p>
+          <span class="caps">14 pieces · Jaipur</span>
+        </article>
+        <article class="coll">
+          <div class="arch">
+            <span class="arch-bg"></span><span class="arch-jali"></span>
+            <svg class="arch-line" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true"><path d="M0,1 L0,0.47 C0,0.235 0.195,0.082 0.5,0 C0.805,0.082 1,0.235 1,0.47 L1,1 Z"/></svg>
+            <svg class="piece" viewBox="0 0 320 300" role="img" aria-label="Temple gold jhumka earrings"><use href="#jwl-earrings"/></svg>
+          </div>
+          <h3>Temple Gold</h3>
+          <p>South Indian repoussé and cast deity work, with fringe physics modelled so a jhumka swings as it should.</p>
+          <span class="caps">9 pieces · Thanjavur</span>
+        </article>
+        <article class="coll">
+          <div class="arch">
+            <span class="arch-bg"></span><span class="arch-jali"></span>
+            <svg class="arch-line" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true"><path d="M0,1 L0,0.47 C0,0.235 0.195,0.082 0.5,0 C0.805,0.082 1,0.235 1,0.47 L1,1 Z"/></svg>
+            <svg class="piece" viewBox="0 0 320 300" role="img" aria-label="Meenakari enamel kada"><use href="#jwl-bangle"/></svg>
+          </div>
+          <h3>Meenakari Heritage</h3>
+          <p>Enamel on gold, rendered with true subsurface colour so emerald green reads green and not black.</p>
+          <span class="caps">11 pieces · Varanasi</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FUTURE (ivory) ============ -->
+  <section class="band band--ivory pad">
+    <div class="wrap future">
+      <div>
+        <img class="anvaya-mark brand-ornament" src="/brand/anvaya-mark-ink.svg" alt="" aria-hidden="true" style="margin-bottom:1.5rem">
+        <p class="eyebrow">The Future</p>
+        <h2>A new era of jewellery <span class="gilt">experiences.</span></h2>
+        <p class="lede">Anvaya is built as a white-label layer for jewellery houses: your pieces, your lighting, your storefront — our rendering, tracking and showroom.</p>
+        <p style="margin-top:2rem"><a class="btn btn--ink btn--lg" href="#contact">Start a conversation <span aria-hidden="true">→</span></a></p>
+      </div>
+      <div class="future-aside">
+        <ul class="offer">
+          <li><span class="k">01</span><span class="v">Piece digitisation &amp; material authoring</span></li>
+          <li><span class="k">02</span><span class="v">AR try-on for web and in-store tablets</span></li>
+          <li><span class="k">03</span><span class="v">VR showroom for remote bridal consults</span></li>
+          <li><span class="k">04</span><span class="v">Provenance &amp; storytelling modules</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="band band--green pad" id="contact">
+    <div class="wrap contact-grid">
+      <div>
+        <p class="eyebrow">Contact</p>
+        <h2>Bring your atelier <span class="gilt">into reality.</span></h2>
+        <p class="lede">Tell us what you make and how many pieces you'd want digitised first. We'll come back with a scope, a timeline and a sample scan of one of your pieces.</p>
+        <div class="lockup" style="align-items:flex-start;margin-top:2.8rem">
+          <div class="rule-tag" style="justify-content:flex-start">
+            <i style="max-width:40px"></i><span>Heritage Meets Reality</span>
+          </div>
+        </div>
+      </div>
+      <form class="form" id="contactForm" novalidate>
+        <div class="row2">
+          <div class="field"><label for="cName">Name</label><input id="cName" name="name" type="text" placeholder="Your name" required></div>
+          <div class="field"><label for="cHouse">Jewellery house</label><input id="cHouse" name="house" type="text" placeholder="Brand or atelier"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label for="cEmail">Email</label><input id="cEmail" name="email" type="email" placeholder="you@house.com" required></div>
+          <div class="field"><label for="cInterest">Interested in</label>
+            <select id="cInterest" name="interest">
+              <option>AR try-on</option><option>VR showroom</option><option>3D digitisation</option><option>Full platform</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label for="cMsg">Message</label><textarea id="cMsg" name="message" placeholder="What would you like to show your clients?"></textarea></div>
+        <button class="btn btn--gold btn--lg" type="submit" style="justify-self:start">Send enquiry <span aria-hidden="true">→</span></button>
+        <p class="form-note" id="formNote">Enquiries are not wired up yet — see the TODO in src/ui/site.ts.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap foot-grid">
+    <div class="foot-brand">
+      <img class="anvaya-mark" src="/brand/anvaya-mark.svg" alt="" aria-hidden="true">
+      <img class="anvaya-wordmark" src="/brand/anvaya-wordmark.svg" alt="ANVAYA">
+      <p>Indian heritage. Immersive experiences. Future luxury.</p>
+    </div>
+    <div class="foot-col">
+      <h4>Experience</h4>
+      <ul><li><a href="#experience">AR Try-On</a></li><li><a href="#experience">VR Showroom</a></li><li><a href="#technology">3D Visualisation</a></li><li><a href="#technology">Storytelling</a></li></ul>
+    </div>
+    <div class="foot-col">
+      <h4>Collections</h4>
+      <ul><li><a href="#collections">Kundan &amp; Polki</a></li><li><a href="#collections">Temple Gold</a></li><li><a href="#collections">Meenakari</a></li><li><a href="#collections">Bridal Sets</a></li></ul>
+    </div>
+    <div class="foot-col">
+      <h4>Company</h4>
+      <ul><li><a href="#vision">About</a></li><li><a href="#technology">Technology</a></li><li><a href="#contact">Partnerships</a></li><li><a href="/terms.html">Terms &amp; Privacy</a></li></ul>
+    </div>
+  </div>
+  <div class="wrap foot-bar">
+    <span>© 2026 Anvaya. All rights reserved.</span>
+    <span class="caps">Heritage Meets Reality</span>
+  </div>
+</footer>
+<script type="module" src="/src/ui/site.ts"></script>
+</body>
+</html>

@@ -1,34 +1,38 @@
+@import url('./brand.css');
+
+/* Booth screens — ANVAYA. Every value below maps onto a brand token;
+   no raw hex lives in this file. Change the brand in brand.css only. */
 :root {
-  /* Ultra-Luxury Fine Jewelry Atelier Palette */
-  --obsidian: #090807;
-  --noir: #12100e;
-  --surface: #181512;
-  --surface-2: #24201b;
-  --glass: rgba(22, 19, 16, 0.78);
-  --glass-border: rgba(212, 175, 55, 0.28);
+  /* Atelier ground: Forest Green deepened for the camera screens */
+  --obsidian: var(--anvaya-green-950);
+  --noir: var(--anvaya-green-900);
+  --surface: var(--anvaya-green-800);
+  --surface-2: var(--anvaya-green-700);
+  --glass: rgba(11, 31, 26, 0.78);
+  --glass-border: rgba(214, 179, 106, 0.28);
 
-  --paper: #0c0b0a;
-  --paper-2: #1c1814;
-  --ink: #f7f3ec;
-  --ink-muted: #a39b8f;
-  --hairline: rgba(212, 175, 55, 0.22);
+  --paper: var(--anvaya-green-950);
+  --paper-2: var(--anvaya-green-800);
+  --ink: var(--anvaya-mist);
+  --ink-muted: var(--anvaya-sage);
+  --hairline: var(--anvaya-hairline-dark);
 
-  /* Metallic Champagne 22K Gold Gradient */
-  --accent: #d4af37;
-  --accent-light: #f7e2a3;
-  --accent-press: #b89122;
-  --gold-gradient: linear-gradient(135deg, #f7e2a3 0%, #d4af37 50%, #9e7819 100%);
-  --gold-glow: 0 8px 32px rgba(212, 175, 55, 0.32);
-  --on-accent: #0f0b03;
+  /* Champagne Gold */
+  --accent: var(--anvaya-gold);
+  --accent-light: var(--anvaya-gold-lit);
+  --accent-press: var(--anvaya-gold-press);
+  --gold-gradient: var(--anvaya-gold-foil);
+  --gold-glow: var(--anvaya-gold-glow);
+  --on-accent: var(--anvaya-green-900);
 
-  /* Live Camera Overlay */
-  --night: #090807;
-  --cam-text: #f7f3ec;
-  --cam-scrim: rgba(12, 10, 8, 0.78);
-  --cam-gradient: linear-gradient(to top, rgba(9, 8, 7, 0.94) 0%, rgba(9, 8, 7, 0.8) 60%, rgba(9, 8, 7, 0) 100%);
+  /* Live camera overlay */
+  --night: var(--anvaya-green-950);
+  --cam-text: var(--anvaya-mist);
+  --cam-scrim: rgba(7, 21, 18, 0.78);
+  --cam-gradient: linear-gradient(to top, rgba(7, 21, 18, 0.94) 0%, rgba(7, 21, 18, 0.8) 60%, rgba(7, 21, 18, 0) 100%);
 
-  --serif: 'Cormorant Garamond', Georgia, serif;
-  --sans: 'Montserrat', system-ui, -apple-system, sans-serif;
+  --serif: var(--anvaya-display);
+  --sans: var(--anvaya-ui);
   --m: 48px;
 }
 
@@ -42,7 +46,7 @@
 html,
 body {
   height: 100%;
-  background: #050403;
+  background: #050f0d;
   font-family: var(--sans);
   color: var(--ink);
   overflow: hidden;
@@ -68,7 +72,7 @@ body {
   flex-direction: column;
   padding: var(--m);
   animation: screenFade 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  background: radial-gradient(circle at 50% 25%, #1c1813 0%, var(--noir) 85%);
+  background: radial-gradient(circle at 50% 25%, #173830 0%, var(--noir) 85%);
 }
 
 .screen.on {
@@ -99,7 +103,7 @@ h2,
   font-size: 76px;
   line-height: 1.08;
   font-family: var(--serif);
-  color: #fff;
+  color: var(--anvaya-ivory);
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
 }
 
@@ -205,7 +209,7 @@ h2,
   min-height: 72px;
   padding: 0 36px;
   font-size: 24px;
-  background: rgba(212, 175, 55, 0.15);
+  background: rgba(214, 179, 106, 0.15);
   border: 1px solid var(--accent);
   color: var(--accent-light);
 }
@@ -231,7 +235,7 @@ h2,
 /* 4.1 START SCREEN */
 #start {
   padding: 0;
-  background: #000;
+  background: var(--anvaya-green-950);
 }
 
 .hero {
@@ -252,24 +256,32 @@ h2,
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(9, 8, 7, 0.25) 0%, rgba(9, 8, 7, 0.4) 60%, rgba(9, 8, 7, 0.95) 90%, var(--noir) 100%);
+  background: linear-gradient(to bottom, rgba(7, 21, 18, 0.25) 0%, rgba(7, 21, 18, 0.4) 60%, rgba(7, 21, 18, 0.95) 90%, var(--noir) 100%);
 }
 
+/* ANVAYA lockup over the hero. The logotype is custom artwork, so it is
+   placed as SVG and never re-set in a font. */
 .wordmark-wrap {
   position: relative;
   z-index: 2;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+  filter: drop-shadow(0 4px 24px rgba(0, 0, 0, 0.75)) drop-shadow(0 0 48px rgba(214, 179, 106, 0.22));
 }
 
-.wordmark {
-  font-family: var(--serif);
-  font-size: 78px;
-  font-weight: 600;
-  letter-spacing: 0.38em;
-  color: #fff;
-  text-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.8),
-    0 0 40px rgba(212, 175, 55, 0.5);
+.wordmark-wrap .anvaya-mark {
+  width: 116px;
+}
+
+.wordmark-wrap .anvaya-wordmark {
+  width: 620px;
+}
+
+.wordmark-wrap .anvaya-tagline {
+  font-size: 22px;
+  margin: 2px 0 0;
 }
 
 .wordmark-sub {
@@ -296,7 +308,7 @@ h2,
 }
 
 .btn-sparkle {
-  color: #fff;
+  color: var(--anvaya-ivory);
   font-size: 24px;
   opacity: 0.85;
 }
@@ -309,12 +321,12 @@ h2,
   0%,
   100% {
     box-shadow:
-      0 0 0 0 rgba(212, 175, 55, 0.4),
+      0 0 0 0 rgba(214, 179, 106, 0.4),
       var(--gold-glow);
   }
   50% {
     box-shadow:
-      0 0 0 32px rgba(212, 175, 55, 0),
+      0 0 0 32px rgba(214, 179, 106, 0),
       var(--gold-glow);
   }
 }
@@ -350,7 +362,7 @@ h2,
   width: 104px;
   height: 104px;
   border-radius: 50%;
-  background: rgba(212, 175, 55, 0.12);
+  background: rgba(214, 179, 106, 0.12);
   border: 1px solid var(--accent);
   display: grid;
   place-items: center;
@@ -430,7 +442,7 @@ h2,
 
 .cat.sel {
   border-color: var(--accent);
-  box-shadow: 0 12px 36px rgba(212, 175, 55, 0.28);
+  box-shadow: 0 12px 36px rgba(214, 179, 106, 0.28);
 }
 
 .cat.sel .cat-bg {
@@ -443,7 +455,7 @@ h2,
   z-index: 2;
   font-family: var(--serif);
   font-size: 46px;
-  color: #fff;
+  color: var(--anvaya-ivory);
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
 }
 
@@ -504,7 +516,7 @@ h2,
 
 /* 4.4 LIVE TRY-ON SCREEN */
 #live {
-  background: #000;
+  background: var(--anvaya-green-950);
   color: var(--cam-text);
 }
 
@@ -533,7 +545,7 @@ h2,
   right: 0;
   top: 0;
   height: 140px;
-  background: linear-gradient(to bottom, rgba(9, 8, 7, 0.95) 0%, rgba(9, 8, 7, 0.6) 80%, transparent 100%);
+  background: linear-gradient(to bottom, rgba(7, 21, 18, 0.95) 0%, rgba(7, 21, 18, 0.6) 80%, transparent 100%);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -557,7 +569,7 @@ h2,
 .bar .name {
   font-family: var(--serif);
   font-size: 44px;
-  color: #fff;
+  color: var(--anvaya-ivory);
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
@@ -584,9 +596,9 @@ h2,
   width: 480px;
   height: 640px;
   margin-left: -240px;
-  border: 3px solid rgba(212, 175, 55, 0.45);
+  border: 3px solid rgba(214, 179, 106, 0.45);
   border-radius: 50%;
-  box-shadow: 0 0 40px rgba(212, 175, 55, 0.2);
+  box-shadow: 0 0 40px rgba(214, 179, 106, 0.2);
   transition: opacity 1s ease;
   z-index: 3;
   pointer-events: none;
@@ -648,7 +660,7 @@ h2,
 .tab.sel {
   background: var(--gold-gradient);
   color: var(--on-accent);
-  border-color: #fff;
+  border-color: var(--anvaya-ivory);
   box-shadow: var(--gold-glow);
 }
 
@@ -664,7 +676,7 @@ h2,
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid var(--hairline);
-  color: #fff;
+  color: var(--anvaya-ivory);
   font-size: 28px;
   backdrop-filter: blur(12px);
   flex-shrink: 0;
@@ -701,7 +713,7 @@ h2,
 
 .thumb.sel {
   border-color: var(--accent);
-  box-shadow: 0 0 24px rgba(212, 175, 55, 0.6);
+  box-shadow: 0 0 24px rgba(214, 179, 106, 0.6);
   transform: scale(1.06);
 }
 
@@ -717,7 +729,7 @@ h2,
   border-radius: 50%;
   border: 4px solid var(--accent);
   background: rgba(0, 0, 0, 0.4);
-  box-shadow: 0 0 32px rgba(212, 175, 55, 0.45);
+  box-shadow: 0 0 32px rgba(214, 179, 106, 0.45);
   display: grid;
   place-items: center;
   cursor: pointer;
@@ -739,13 +751,13 @@ h2,
 .count {
   position: absolute;
   inset: 0;
-  background: rgba(9, 8, 7, 0.82);
+  background: rgba(7, 21, 18, 0.82);
   display: none;
   place-items: center;
   font-family: var(--serif);
   font-size: 200px;
   color: var(--accent-light);
-  text-shadow: 0 0 60px rgba(212, 175, 55, 0.8);
+  text-shadow: 0 0 60px rgba(214, 179, 106, 0.8);
   z-index: 10;
 }
 
@@ -780,7 +792,7 @@ h2,
   flex: 1;
   margin: 24px 0 32px;
   border-radius: 32px;
-  background: #000;
+  background: var(--anvaya-green-950);
   border: 2px solid var(--hairline);
   position: relative;
   max-height: 1100px;
@@ -788,23 +800,22 @@ h2,
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
 }
 
-.photo img {
+.photo img:not(.photo-brand) {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
+/* Watermark on the captured portrait. */
 .photo-brand {
   position: absolute;
-  bottom: 28px;
+  bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
-  font-family: var(--serif);
-  font-size: 32px;
-  letter-spacing: 0.35em;
-  color: #fff;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+  width: 280px;
+  opacity: 0.94;
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.9));
   pointer-events: none;
 }
 
