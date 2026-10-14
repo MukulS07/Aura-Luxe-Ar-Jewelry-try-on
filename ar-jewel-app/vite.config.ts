@@ -11,7 +11,8 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html'),
+        main: resolve(__dirname, 'index.html'), // public ANVAYA site
+        booth: resolve(__dirname, 'booth.html'), // kiosk try-on booth
         share: resolve(__dirname, 'share.html'),
         admin: resolve(__dirname, 'admin.html'),
         terms: resolve(__dirname, 'terms.html'),

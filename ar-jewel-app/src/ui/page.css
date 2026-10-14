@@ -1,16 +1,41 @@
+@import url('./brand.css');
+
+/* Paper screens (share, admin, terms) — ANVAYA on Heritage Ivory.
+   Every value maps onto a brand token; change the brand in brand.css only. */
 :root {
-  --paper: #f6f2ea;
-  --paper-2: #ede7db;
-  --ink: #1b1815;
-  --ink-muted: #6b635a;
-  --hairline: #d9d1c3;
-  --accent: #c9a24a;
-  --accent-press: #b38e3c;
-  --on-accent: #1b1305;
-  --danger: #c0483a;
-  --success: #3e8f5e;
-  --serif: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
-  --sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --paper: var(--anvaya-ivory);
+  --paper-2: var(--anvaya-ivory-2);
+  --ink: var(--anvaya-charcoal);
+  --ink-muted: var(--anvaya-slate);
+  --hairline: var(--anvaya-ivory-3);
+  --accent: var(--anvaya-gold);
+  --accent-ink: var(--anvaya-gold-deep); /* gold as TEXT on ivory — never --accent */
+  --accent-press: var(--anvaya-gold-press);
+  --on-accent: var(--anvaya-green-900);
+  --danger: #a3402f;
+  --success: #2f6b4a;
+  --serif: var(--anvaya-display);
+  --sans: var(--anvaya-ui);
+}
+
+/* Brand header for the paper pages. */
+.brand-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 0 24px;
+  border-bottom: 1px solid var(--hairline);
+  margin-bottom: 28px;
+}
+.brand-head .anvaya-mark {
+  width: 30px;
+}
+.brand-head .anvaya-wordmark {
+  width: 148px;
+}
+.brand-head .anvaya-tagline {
+  font-size: 9px;
 }
 * {
   box-sizing: border-box;
@@ -160,7 +185,7 @@ input[type='checkbox'] {
   position: relative;
   width: 360px;
   height: 640px;
-  background: #12100e;
+  background: var(--anvaya-green-950);
   border-radius: 16px;
   overflow: hidden;
   margin: 12px 0;

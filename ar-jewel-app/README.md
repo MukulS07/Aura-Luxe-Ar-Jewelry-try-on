@@ -11,7 +11,7 @@ build:    npm run build
 start:    ADMIN_TOKEN=... PUBLIC_BASE_URL=http://<booth-lan-ip>:8787 npm start   # serves dist + API
 test:     npm test
 ```
-Pages: `/` booth · `/admin.html` catalog admin · `/share.html?p=&t=` visitor photo page · `/terms.html`.
+Pages: `/` public site · `/booth.html` booth · `/admin.html` catalog admin · `/share.html?p=&t=` visitor photo page · `/terms.html`.
 Add `?debug=1` to the booth URL for an FPS counter.
 
 ## Kiosk

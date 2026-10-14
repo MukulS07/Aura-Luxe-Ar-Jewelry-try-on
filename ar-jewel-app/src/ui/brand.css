@@ -1,0 +1,118 @@
+/* ===================================================================
+   ANVAYA brand kit — single source of truth for colour, type and logo.
+   Values taken from the ANVAYA Luxury Brand Identity Board v1.
+   This file replaces the placeholder tokens design.md section 3 asked
+   us to swap "when the brand kit arrives".
+
+   Rules that still hold from design.md:
+     - Gold is never used for body text on ivory. Use --anvaya-gold-deep
+       (AA at 5.1:1) for gold-coloured text on a paper screen; plain
+       --anvaya-gold is for fills, hairlines and selected states.
+     - Over live video, text sits on a scrim, never on bare camera.
+     - Never use colour alone to carry meaning.
+
+   Page stylesheets map their own semantic tokens onto these. Do not
+   hard-code a brand hex anywhere else.
+   =================================================================== */
+
+:root {
+  /* --- Core palette (exactly as supplied) --- */
+  --anvaya-green: #102a24; /* Forest Green      · RGB 16 42 36   · CMYK 78 48 63 67 */
+  --anvaya-gold: #d6b36a; /* Champagne Gold    · RGB 214 179 106 · CMYK 16 28 68 0  */
+  --anvaya-ivory: #f4ebdd; /* Heritage Ivory    · RGB 244 235 221 · CMYK 3 7 13 0    */
+  --anvaya-charcoal: #202321; /* Obsidian Charcoal · RGB 32 35 33   · CMYK 74 64 63 72 */
+
+  /* --- Derived greens: depth behind the camera view --- */
+  --anvaya-green-950: #071512;
+  --anvaya-green-900: #0b1f1a;
+  --anvaya-green-800: var(--anvaya-green);
+  --anvaya-green-700: #17382f;
+  --anvaya-green-600: #1f4639;
+
+  /* --- Derived golds --- */
+  --anvaya-gold-lit: #efd9a8; /* highlight end of the foil */
+  --anvaya-gold-press: #b9924a; /* pressed state */
+  --anvaya-gold-deep: #7d5e28; /* AA-safe gold for text on ivory (5.1:1) */
+  --anvaya-gold-foil: linear-gradient(135deg, #efd9a8 0%, #d6b36a 50%, #9c7736 100%);
+  --anvaya-gold-glow: 0 8px 32px rgba(214, 179, 106, 0.28);
+
+  /* --- Derived neutrals: green-biased, never a flat grey --- */
+  --anvaya-ivory-2: #eadfcc;
+  --anvaya-ivory-3: #ded2bc;
+  --anvaya-mist: #ede4d5; /* body text on green    · 13.5:1 */
+  --anvaya-sage: #a3b3a8; /* muted text on green   ·  7.8:1 */
+  --anvaya-slate: #5a6660; /* muted text on ivory   ·  5.1:1 */
+  --anvaya-hairline-dark: rgba(214, 179, 106, 0.24);
+  --anvaya-hairline-light: rgba(32, 35, 33, 0.14);
+
+  /* --- Type --- */
+  --anvaya-display: 'Cormorant Garamond', 'Hoefler Text', Georgia, serif;
+  --anvaya-ui: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --anvaya-track-tagline: 0.44em;
+  --anvaya-track-label: 0.26em;
+
+  /* --- Logo assets (see public/brand/) --- */
+  --anvaya-mark-url: url('/brand/anvaya-mark.svg');
+  --anvaya-wordmark-url: url('/brand/anvaya-wordmark.svg');
+  --anvaya-lockup-url: url('/brand/anvaya-lockup.svg');
+}
+
+/* ===================================================================
+   Logo components. The logotype is custom artwork, not a font — always
+   place it as one of the SVGs in public/brand/, never re-set in type.
+   Size is set by the consuming stylesheet; aspect ratio is locked here.
+   =================================================================== */
+
+.anvaya-mark,
+.anvaya-wordmark,
+.anvaya-lockup {
+  display: block;
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.anvaya-mark {
+  aspect-ratio: 895.8 / 1000;
+}
+
+.anvaya-wordmark {
+  aspect-ratio: 6403.5 / 1000;
+}
+
+.anvaya-lockup {
+  aspect-ratio: 6403.5 / 3292.2;
+}
+
+/* "HERITAGE MEETS REALITY", set in type with rules either side, the way
+   the identity board locks it under the wordmark. */
+.anvaya-tagline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85em;
+  font-family: var(--anvaya-ui);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: var(--anvaya-track-tagline);
+  color: var(--anvaya-gold);
+  white-space: nowrap;
+}
+
+.anvaya-tagline::before,
+.anvaya-tagline::after {
+  content: '';
+  flex: 0 1 4.5em;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+.anvaya-tagline > span {
+  padding-left: var(--anvaya-track-tagline); /* optical: kill the trailing track */
+}
+
+/* On ivory the tagline takes the AA-safe gold. */
+.anvaya-tagline.on-paper {
+  color: var(--anvaya-gold-deep);
+}
